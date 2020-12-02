@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const path = require('path')
 const { execSync } = require('child_process')
-const { name, version } = require('../../package.json')
+const { name, version } = require('../package.json')
 
 const rootDirectory = path.join(__dirname, '../..')
 
