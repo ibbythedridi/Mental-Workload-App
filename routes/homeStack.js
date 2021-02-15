@@ -5,7 +5,6 @@ import ISA from '../screens/isa';
 import ScreenTime from '../screens/screenTime';
 import Sleep from '../screens/sleep';
 import Settings from '../screens/settings';
-import { Button } from 'react-native';
 
 const screens = {
     Dashboard: {
