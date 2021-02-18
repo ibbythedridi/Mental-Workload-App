@@ -14,8 +14,5 @@ export const globalStyles = StyleSheet.create({
       shadowRadius: 2,
       shadowOpacity: 1.0,
       elevation: 5
-    },
-    scroll: {
-      height: 220
     }
   });

@@ -3,8 +3,7 @@ import {
     View,
     Text,
     ScrollView,
-    Dimensions,
-    FlatList
+    Dimensions
 } from 'react-native';
 import { globalStyles } from '../styles/global';
 import { LineChart } from 'react-native-chart-kit';
@@ -62,20 +61,19 @@ export default function ISA() {
 
     return (
         <View style={globalStyles.container}>
-            <Text>Mental Workload</Text>
-            <ScrollView style={globalStyles.scroll}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}>
-                <LineChart
-                    //verticalLabelRotation={90}
-                    data={data}
-                    width={graphWidth}
-                    height={220}
-                    chartConfig={chartConfig}
-                    bezier
-                    //style={globalStyles.chart}
-                />
-            </ScrollView>
+            <View style={globalStyles.chart}>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                    <LineChart
+                        data={data}
+                        width={graphWidth}
+                        height={220}
+                        chartConfig={chartConfig}
+                        bezier
+                        style={{borderRadius: 10}}
+                    />
+                </ScrollView>
+            </View>
+            
             <Text>Test</Text>
         </View>
     )
