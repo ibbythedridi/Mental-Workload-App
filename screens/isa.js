@@ -11,8 +11,6 @@ import * as SQLite from 'expo-sqlite';
 
 const db = SQLite.openDatabase('db.db');
 
-const screenWidth = Dimensions.get('window').width;
-
 const chartConfig = {
     backgroundGradientFrom: '#fff',
     backgroundGradientTo: '#fff',
@@ -25,7 +23,7 @@ const chartConfig = {
 var graphData = [];
 var graphLabels = [];
 
-// Effect hook to retrieve data from database
+// Retrieve data from database
 //React.useEffect(() => {
 db.transaction(tx => {
     tx.executeSql('SELECT ratingOne, dateTime from isa', [], (_, { rows }) => {
@@ -40,12 +38,9 @@ db.transaction(tx => {
 export default function ISA() {
 
     const data = {
-        // Change label to the time from retrieved rows maybe?
         labels: [],
         datasets: [
             {
-                // Replace data here with the ratingOne values from retrieved rows
-                //data: [5, 2, 5, 2, 1, 2, 1],
                 data: [],
                 color: (opacity = 1) => `rgba(20, 20, 20, ${opacity})`,
                 strokeWidth: 2
@@ -61,6 +56,7 @@ export default function ISA() {
 
     return (
         <View style={globalStyles.container}>
+            <Text> All recorded mental workload levels</Text>
             <View style={globalStyles.chart}>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                     <LineChart
@@ -73,8 +69,6 @@ export default function ISA() {
                     />
                 </ScrollView>
             </View>
-            
-            <Text>Test</Text>
         </View>
     )
 }
