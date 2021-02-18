@@ -2,7 +2,9 @@ import React from 'react';
 import {
     View,
     Text,
-    Dimensions
+    ScrollView,
+    Dimensions,
+    FlatList
 } from 'react-native';
 import { globalStyles } from '../styles/global';
 import { LineChart } from 'react-native-chart-kit';
@@ -19,29 +21,33 @@ const chartConfig = {
     strokeWidth: 2, // optional, default 3
     decimalPlaces: 0,
     useShadowColorFromDataset: false // optional
-  };
+};
+
+var graphData = [];
+var graphLabels = [];
+
+// Effect hook to retrieve data from database
+//React.useEffect(() => {
+db.transaction(tx => {
+    tx.executeSql('SELECT ratingOne, dateTime from isa', [], (_, { rows }) => {
+        for (var i=0; i < rows._array.length; i++) {
+            graphData.push(rows._array[i].ratingOne);
+            graphLabels.push(rows._array[i].dateTime.slice(11, 16));
+        }
+    });
+});
+//}, []);
 
 export default function ISA() {
 
-    // Effect hook to retrieve data from database
-    React.useEffect(() => {
-    db.transaction(tx => {
-        tx.executeSql('SELECT * from isa', [], (_, { rows }) => {
-            var graphData = JSON.stringify(rows);
-            console.log(graphData);
-
-            //save the relevant columns in lists
-        });
-    });
-    }, []);
-
     const data = {
         // Change label to the time from retrieved rows maybe?
-        labels: ['Mon', 'Tues', 'Weds', 'Thurs', 'Fri', 'Sat', 'Sun'],
+        labels: [],
         datasets: [
             {
                 // Replace data here with the ratingOne values from retrieved rows
-                data: [1, 2, 5, 2, 1, 2, 1],
+                //data: [5, 2, 5, 2, 1, 2, 1],
+                data: [],
                 color: (opacity = 1) => `rgba(20, 20, 20, ${opacity})`,
                 strokeWidth: 2
             }
@@ -49,17 +55,28 @@ export default function ISA() {
         legend: ['Mental Workload']
     }
 
+    data.datasets[0].data = graphData;
+    data.labels = graphLabels;
+
+    var graphWidth = graphData.length*80;
+
     return (
         <View style={globalStyles.container}>
-            <Text>Mental Workload - 7 Days</Text>
-            <LineChart
-                data={data}
-                width={screenWidth - 40}
-                height={220}
-                chartConfig={chartConfig}
-                bezier
-                style={globalStyles.chart}
-            />
+            <Text>Mental Workload</Text>
+            <ScrollView style={globalStyles.scroll}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}>
+                <LineChart
+                    //verticalLabelRotation={90}
+                    data={data}
+                    width={graphWidth}
+                    height={220}
+                    chartConfig={chartConfig}
+                    bezier
+                    //style={globalStyles.chart}
+                />
+            </ScrollView>
+            <Text>Test</Text>
         </View>
     )
 }
