@@ -2,8 +2,7 @@ import React from 'react';
 import {
     View,
     Text,
-    ScrollView,
-    Dimensions
+    ScrollView
 } from 'react-native';
 import { globalStyles } from '../styles/global';
 import { LineChart } from 'react-native-chart-kit';
