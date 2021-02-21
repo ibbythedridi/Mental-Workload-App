@@ -25,9 +25,9 @@ var graphLabels = [];
 // Retrieve data from database
 //React.useEffect(() => {
 db.transaction(tx => {
-    tx.executeSql('SELECT ratingOne, dateTime from isa', [], (_, { rows }) => {
+    tx.executeSql('SELECT workloadRating, dateTime from isa', [], (_, { rows }) => {
         for (var i=0; i < rows._array.length; i++) {
-            graphData.push(rows._array[i].ratingOne);
+            graphData.push(rows._array[i].workloadRating);
             graphLabels.push(rows._array[i].dateTime.slice(11, 16));
         }
     });

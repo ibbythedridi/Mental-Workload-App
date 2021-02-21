@@ -13,6 +13,7 @@ export const globalStyles = StyleSheet.create({
       shadowOffset: { width: 0, height: 2 },
       shadowRadius: 2,
       shadowOpacity: 1.0,
-      elevation: 5
+      elevation: 5,
+      marginBottom: 20
     }
   });
