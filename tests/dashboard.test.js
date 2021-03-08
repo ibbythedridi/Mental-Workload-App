@@ -7,7 +7,7 @@ it('renders dashboard correctly', () => {
   expect(tree).toMatchSnapshot();
 });
 
-// This checks all the components are existent in the JSON (views and buttons)
+// This checks the correct component(s) are existent in the JSON (views and buttons)
 describe("<Dashboard />", () => {
   it('has 8 children (dashboard components)', () => {
     const tree = renderer.create(<Dashboard />).toJSON();
