@@ -1,22 +1,22 @@
 ---
-language: node_js
-node_js:
-  - node
-  - lts/*
+image: node:alpine
 cache:
-  directories:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
     - ~/.npm
     - .jest
+stages:
+  - test
+  - deploy
 before_script:
-  - npm install -g npm@latest
-script:
   - npm ci
-  - npx jest --ci
-jobs:
-  include:
-    - stage: deploy
-      node_js: lts/*
-      script:
-        - npm ci
-        - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
-        - npx expo publish --non-interactive
+jest-tests:
+  stage: test
+  script:
+    - npx jest --ci
+expo-deployments:
+  stage: deploy
+  script:
+    - apk add --no-cache bash
+    - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+    - npx expo publish --non-interactive
