@@ -20,29 +20,28 @@ const chartConfig = {
 };
 
 // Time
-var graphData = [];
+var neutral = [0];
+var productive = [0];
+var unproductive = [0];
 
 // Intervals
 var graphLabels = [];
 
-// Categories
-var graphLegend = [];
-
-// Colours
-var colours = [];
-
 db.transaction(tx => {
-    tx.executeSql('SELECT name, date, interval, time, category from screenTime', [], (_, { rows }) => {
+    tx.executeSql('SELECT name, date, interval, time, category from screenTime ORDER BY category', [], (_, { rows }) => {
         for (var i=0; i < rows._array.length; i++) {
-            graphData.push(rows._array[i].time);
-
+            var time = rows._array[i].time;
+            
             // Unique intervals are added to the graphLabels array
             var interval = rows._array[i].interval.slice(0,5);
             if (graphLabels.includes(interval) == false) graphLabels.push(interval);
 
-            // Unique categories are added to the graphLegend array
+            // Times are pushed to the relevant category array
             var category = rows._array[i].category;
-            if (graphLegend.includes(category) == false) graphLegend.push(category);
+
+            if (category == 'neutral') neutral[0] += time;
+            else if (category == 'productive') productive[0] += time;
+            else if (category == 'unproductive') unproductive[0] += time;
         }
     });
 });
@@ -51,14 +50,12 @@ export default function ScreenTime() {
 
     const data = {
         labels:[],
-        legend: [],
-        data: [graphData],
-        barColors: ['#dfe4ea', '#ced6e0', '#a4b0be'],
+        legend: ['neutral', 'productive', 'unproductive'],
+        data: [[neutral[0], productive[0], unproductive[0]]],
+        barColors: ['#add8e6', '#00ff00', '#ff0000'],
     }
 
     data.labels = graphLabels;
-    data.legend = graphLegend;
-    //data.data = graphData;
 
     return (
         <View style={globalStyles.container}>

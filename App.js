@@ -57,17 +57,17 @@ export default function App() {
       // tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 5, ?)', ['Photos', '10/03/2021', '10:00:00-10:30:00', 'neutral']);
       // tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 205, ?)', ['youtube.com', '10/03/2021', '10:00:00-10:30:00', 'unproductive']);
       
-      tx.executeSql('SELECT * from isa', [], (_, { rows }) => 
-        console.log(JSON.stringify(rows))
-      );
+      // tx.executeSql('SELECT * from isa', [], (_, { rows }) => 
+      //   console.log(JSON.stringify(rows))
+      // );
 
-      tx.executeSql('SELECT * from sleep', [], (_, { rows }) => 
-        console.log(JSON.stringify(rows))
-      );
+      // tx.executeSql('SELECT * from sleep', [], (_, { rows }) => 
+      //   console.log(JSON.stringify(rows))
+      // );
 
-      tx.executeSql('SELECT * from screenTime', [], (_, { rows }) => 
-        console.log(JSON.stringify(rows))
-      );
+      // tx.executeSql('SELECT * from screenTime', [], (_, { rows }) => 
+      //   console.log(JSON.stringify(rows))
+      // );
     });
   }, []);
 
