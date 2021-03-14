@@ -37,12 +37,12 @@ export default function App() {
       tx.executeSql('CREATE TABLE IF NOT EXISTS screenTime (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, date TEXT NOT NULL, interval TEXT NOT NULL, time INTEGER NOT NULL, category TEXT NOT NULL)'
       );
       
-      // tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 4, ?)', ['20/07/2020-10:12:13', 'this is the summary 2']);
-      // tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['20/07/2020-11:12:13', 'this is the summary 3']);
-      // tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', ['20/07/2020-12:12:13', 'this is the summary 4']);
-      // tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 5, ?)', ['20/07/2020-13:12:13', 'this is the summary 5']);
-      // tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 5, ?)', ['20/07/2020-15:12:13', 'this is the summary 7']);
-      // tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 5, ?)', ['20/07/2020-16:12:13', 'this is the summary 8']);
+      // tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 3, ?)', ['20/07/2020-17:12:13', 'this is the summary 9']);
+      // tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', ['20/07/2020-18:12:13', 'this is the summary 10']);
+      // tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', ['20/07/2020-19:12:13', 'this is the summary 11']);
+      // tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', ['20/07/2020-20:12:13', 'this is the summary 12']);
+      // tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 3, ?)', ['20/07/2020-21:12:13', 'this is the summary 13']);
+      // tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['20/07/2020-22:12:13', 'this is the summary 14']);
 
       // tx.executeSql('INSERT INTO sleep (date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality) values (?, 8.5, 0.5, 0, 3)', ['20/07/2020']);
       // tx.executeSql('INSERT INTO sleep (date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality) values (?, 9, 0, 0, 5)', ['21/07/2020']);
