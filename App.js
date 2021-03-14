@@ -50,12 +50,12 @@ export default function App() {
       // tx.executeSql('INSERT INTO sleep (date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality) values (?, 8.5, 0, 0, 3)', ['23/07/2020']);
       // tx.executeSql('INSERT INTO sleep (date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality) values (?, 9.5, 0.5, 2, 5)', ['24/07/2020']);
 
-      //tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 165, ?)', ['Microsoft Word', '10/03/2021', '10:00:00-10:30:00', 'productive']);
-      // tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 65, ?)', ['Adobe Reader', '10/03/2021', '10:00:00-10:30:00', 'productive']);
-      // tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 95, ?)', ['Microsoft Outlook', '10/03/2021', '10:00:00-10:30:00', 'productive']);
-      // tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 60, ?)', ['wordpress.com', '10/03/2021', '10:00:00-10:30:00', 'neutral']);
-      // tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 5, ?)', ['Photos', '10/03/2021', '10:00:00-10:30:00', 'neutral']);
-      // tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 205, ?)', ['youtube.com', '10/03/2021', '10:00:00-10:30:00', 'unproductive']);
+      // tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 100, ?)', ['Microsoft Word', '10/03/2021', '10:30:00-11:00:00', 'productive']);
+      // tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 25, ?)', ['Adobe Reader', '10/03/2021', '10:30:00-11:00:00', 'productive']);
+      // tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 225, ?)', ['Microsoft Outlook', '10/03/2021', '10:30:00-11:00:00', 'productive']);
+      // tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 20, ?)', ['wordpress.com', '10/03/2021', '10:30:00-11:00:00', 'neutral']);
+      // tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 111, ?)', ['Photos', '10/03/2021', '10:30:00-11:00:00', 'neutral']);
+      // tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 20, ?)', ['youtube.com', '10/03/2021', '10:30:00-11:00:00', 'unproductive']);
       
       // tx.executeSql('SELECT * from isa', [], (_, { rows }) => 
       //   console.log(JSON.stringify(rows))
