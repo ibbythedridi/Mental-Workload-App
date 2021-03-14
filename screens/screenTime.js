@@ -5,7 +5,7 @@ import {
     ScrollView
 } from 'react-native';
 import { globalStyles } from '../styles/global';
-import { LineChart, StackedBarChart } from 'react-native-chart-kit';
+import { StackedBarChart } from 'react-native-chart-kit';
 import * as SQLite from 'expo-sqlite';
 
 const db = SQLite.openDatabase('db.db');
