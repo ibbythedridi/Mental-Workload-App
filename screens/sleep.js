@@ -5,154 +5,100 @@ import {
     ScrollView
 } from 'react-native';
 import { globalStyles } from '../styles/global';
-import { LineChart } from 'react-native-chart-kit';
+import { VictoryChart, VictoryGroup, VictoryLegend, VictoryLine, VictoryScatter, VictoryTheme } from 'victory-native';
 import * as SQLite from 'expo-sqlite';
 
 const db = SQLite.openDatabase('db.db');
 
-const chartConfig = {
-    backgroundGradientFrom: '#fff',
-    backgroundGradientTo: '#fff',
-    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
-    decimalPlaces: 0,
-    useShadowColorFromDataset: false // optional
-};
-
-const timeInBedData = {
-    labels: [],
-    datasets: [
-        {
-            data: [],
-            color: (opacity = 1) => `rgba(20, 20, 20, ${opacity})`,
-            strokeWidth: 2
-        }
-    ],
-    legend: ['Hours in Bed']
+var colours = {
+    'hoursInBed': '#000',
+    'hoursUntilSleep': '#0000ff',
+    'timesWokenUp': '#ff0000',
+    'sleepQuality': '#00ff00'
 }
 
-const timeTilSleepData = {
-    labels: [],
-    datasets: [
-        {
-            data: [],
-            color: (opacity = 1) => `rgba(20, 20, 20, ${opacity})`,
-            strokeWidth: 2
-        }
-    ],
-    legend: ['Hours until sleep']
-}
-
-const timesWokenUpData = {
-    labels: [],
-    datasets: [
-        {
-            data: [],
-            color: (opacity = 1) => `rgba(20, 20, 20, ${opacity})`,
-            strokeWidth: 2
-        }
-    ],
-    legend: ['Times woken up throughout the night']
-}
-
-const sleepQualityData = {
-    labels: [],
-    datasets: [
-        {
-            data: [],
-            color: (opacity = 1) => `rgba(20, 20, 20, ${opacity})`,
-            strokeWidth: 2
-        }
-    ],
-    legend: ['Sleep Quality Rating']
-}
-
-var graphLabels = [];
-var timeInBed = [];
-var timeTilSleep = [];
-var timesWokenUp = [];
-var sleepQuality = [];
+var hoursInBedData = [];
+var hoursUntilSleepData = [];
+var timesWokenUpData = [];
+var sleepQualityData = [];
 
 // Retrieve data from database
 //React.useEffect(() => {
 db.transaction(tx => {
     tx.executeSql('SELECT date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality from sleep', [], (_, { rows }) => {
         for (var i=0; i < (rows._array.length); i++) {
-            graphLabels.push(rows._array[i].date.slice(0, 5));
-            timeInBed.push(rows._array[i].timeInBed);
-            timeTilSleep.push(rows._array[i].timeTilSleep);
-            timesWokenUp.push(rows._array[i].timesWokenUp);
-            sleepQuality.push(rows._array[i].sleepQuality);
+            var date = rows._array[i].date.slice(0, 5);
+
+            hoursInBedData.push({
+                x: date,
+                y: rows._array[i].timeInBed
+            });
+
+            hoursUntilSleepData.push({
+                x: date,
+                y: rows._array[i].timeTilSleep
+            });
+
+            timesWokenUpData.push({
+                x: date,
+                y: rows._array[i].timesWokenUp
+            });
+
+            sleepQualityData.push({
+                x: date,
+                y: rows._array[i].sleepQuality
+            });
         }
     });
 });
 //}, []);
 
 export default function Sleep() {
-    var graphWidth = graphLabels.length*80;
 
-    timeInBedData.labels = graphLabels;
-    timeInBedData.datasets[0].data = timeInBed;
-
-    timeTilSleepData.labels = graphLabels;
-    timeTilSleepData.datasets[0].data = timeTilSleep;
-
-    timesWokenUpData.labels = graphLabels;
-    timesWokenUpData.datasets[0].data = timesWokenUp;
-
-    sleepQualityData.labels = graphLabels;
-    sleepQualityData.datasets[0].data = sleepQuality;    
+    var graphWidth = hoursInBedData.length*80+70;
 
     return (
-        <ScrollView style={globalStyles.container}>
-            <View style={globalStyles.chart}>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    <LineChart
-                        data={timeInBedData}
-                        width={graphWidth}
-                        height={220}
-                        chartConfig={chartConfig}
-                        bezier
-                        style={{borderRadius: 10}}
+        <View style={globalStyles.container}>
+            <Text> Sleep Data </Text>
+            <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
+                <VictoryChart theme={VictoryTheme.material} height={400} width={graphWidth} domain={{ y: [0, 12] }}>
+                    <VictoryLegend
+                        title='Legend'
+                        centerTitle
+                        orientation='horizontal'
+                        data={[
+                            { name: 'Hours in Bed', symbol: { fill: colours['hoursInBed']} },
+                            { name: 'Hours Until Sleep', symbol: { fill: colours['hoursUntilSleep']} },
+                            { name: 'Times Woken Up', symbol: { fill: colours['timesWokenUp']} },
+                            { name: 'Sleep Quality Rating', symbol: { fill: colours['sleepQuality']} },
+                        ]}
                     />
-                </ScrollView>
-            </View>
-            <View style={globalStyles.chart}>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    <LineChart
-                        data={timeTilSleepData}
-                        width={graphWidth}
-                        height={220}
-                        chartConfig={chartConfig}
-                        bezier
-                        style={{borderRadius: 10}}
-                    />
-                </ScrollView>
-            </View>
-            <View style={globalStyles.chart}>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    <LineChart
-                        data={timesWokenUpData}
-                        width={graphWidth}
-                        height={220}
-                        chartConfig={chartConfig}
-                        bezier
-                        style={{borderRadius: 10}}
-                    />
-                </ScrollView>
-            </View>
-            <View style={globalStyles.chart}>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    <LineChart
-                        data={sleepQualityData}
-                        width={graphWidth}
-                        height={220}
-                        chartConfig={chartConfig}
-                        bezier
-                        style={{borderRadius: 10}}
-                    />
-                </ScrollView>
-            </View>
-        </ScrollView>
+
+                    {/* Hours in Bed */}
+                    <VictoryGroup data={hoursInBedData}>
+                        <VictoryLine style={{ data: { stroke: colours['hoursInBed'] }, parent: { border: '1px solid #ccc'} }} />
+                        <VictoryScatter style = {{ data: { fill: colours['hoursInBed'] }}} />
+                    </VictoryGroup>
+
+                    {/* Hours until Sleep */}
+                    <VictoryGroup data={hoursUntilSleepData}>    
+                        <VictoryLine style={{ data: { stroke: colours['hoursUntilSleep'] }, parent: { border: '1px solid #ccc'} }} />
+                        <VictoryScatter style = {{ data: { fill: colours['hoursUntilSleep'] }}} />
+                    </VictoryGroup>
+
+                    {/* Times Woken UP */}
+                    <VictoryGroup data={timesWokenUpData}>
+                        <VictoryLine style={{ data: { stroke: colours['timesWokenUp'] }, parent: { border: '1px solid #ccc'} }} />
+                        <VictoryScatter style = {{ data: { fill: colours['timesWokenUp'] }}} />
+                    </VictoryGroup>
+
+                    {/* Sleep Quality */}
+                    <VictoryGroup data={sleepQualityData}>    
+                        <VictoryLine style={{ data: { stroke: colours['sleepQuality'] }, parent: { border: '1px solid #ccc'} }} />
+                        <VictoryScatter style = {{ data: { fill: colours['sleepQuality'] }}} />
+                    </VictoryGroup>
+                </VictoryChart>
+            </ScrollView>
+        </View>
     )
 }
