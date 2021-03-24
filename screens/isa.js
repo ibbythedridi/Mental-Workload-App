@@ -16,28 +16,30 @@ const db = SQLite.openDatabase('db.db');
 var graphData = [];
 
 // Retrieve data from database
-//React.useEffect(() => {
-function queryDB(date) {
+async function queryDB(date) {
     let data = [];
-    db.transaction(tx => {
-        tx.executeSql('SELECT workloadRating, dateTime from isa', [], (_, { rows }) => {
-            for (var i=0; i < rows._array.length; i++) {
-                if (rows._array[i].dateTime.slice(0, 10) == Moment(date).format('DD/MM/YYYY')) {
-                    console.log("matching");
-                    data.push({
-                        x: rows._array[i].dateTime.slice(11, 16),
-                        y: rows._array[i].workloadRating
-                    });    
-                }
+    // Promise placed here to make sure the full database transaction has been complete before continuing 
+    return new Promise((resolve, reject) => 
+        db.transaction(tx => {
+            try {
+                tx.executeSql('SELECT workloadRating, dateTime from isa', [], (_, { rows }) => {
+                    for (var i=0; i < rows._array.length; i++) {
+                        if (rows._array[i].dateTime.slice(0, 10) == Moment(date).format('DD/MM/YYYY')) {
+                            data.push({
+                                x: rows._array[i].dateTime.slice(11, 16),
+                                y: rows._array[i].workloadRating
+                            });    
+                        }
+                    }
+                    resolve(data);
+                });
+                
+            } catch (error) {
+                reject(error);
             }
-        });
-    });
-    /* Returning before full completion of code */
-    console.log("returning");
-    return data;
+            
+    }));
 }
-
-//}, []);
 
 export default function ISA() {
 
@@ -48,16 +50,11 @@ export default function ISA() {
     const [showPicker, setShowPicker] = useState(false);
     const [showChart, setShowChart] = useState(false);
 
-    //console.log(Moment(date).format('DD/MM/YYYY'));
-    
-    //console.log(showPicker);
-
     const onChange = async (event, selectedDate) => {
         const currentDate = selectedDate || date;
         setShowPicker(Platform.OS === 'ios');
         setDate(currentDate);
-        graphData = await queryDB(date);
-        console.log(graphData.length);
+        graphData = await queryDB(currentDate);
         if (graphData.length > 0) setShowChart(true);
         else setShowChart(false);
     }
@@ -73,7 +70,7 @@ export default function ISA() {
 
     return (
         <View style={globalStyles.container}>
-            <Text> All recorded mental workload levels</Text>
+            <Text> {Moment(date).format('DD/MM/YYYY')} </Text>
             <View>
                 <Button onPress={showDatePicker} title='Pick date' />
             </View>
