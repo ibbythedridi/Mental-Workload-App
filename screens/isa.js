@@ -22,7 +22,7 @@ async function queryDB(date) {
     return new Promise((resolve, reject) => 
         db.transaction(tx => {
             try {
-                tx.executeSql('SELECT workloadRating, dateTime from isa', [], (_, { rows }) => {
+                tx.executeSql('SELECT workloadRating, dateTime from isa ORDER BY dateTime', [], (_, { rows }) => {
                     for (var i=0; i < rows._array.length; i++) {
                         if (rows._array[i].dateTime.slice(0, 10) == Moment(date).format('DD/MM/YYYY')) {
                             data.push({
@@ -41,9 +41,9 @@ async function queryDB(date) {
     }));
 }
 
-export default function ISA() {
+export default function ISA({ navigation }) {
 
-    var graphWidth = graphData.length*60;
+    var graphWidth = graphData.length*60 + 100;
 
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
@@ -84,7 +84,8 @@ export default function ISA() {
                 />
             )}
             {/* ScrollView for horizontal scrolling when there's lots of data */}
-            {showChart && (<ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
+            {showChart && (<View>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
                 <VictoryChart 
                     theme={VictoryTheme.material} 
                     height = {300} 
@@ -100,10 +101,14 @@ export default function ISA() {
                     </VictoryGroup>
                 </VictoryChart>
             </ScrollView>
+            </View>
             )}
             {!showChart && (
                 <Text>No Data For {Moment(date).format('DD/MM/YYYY')}</Text>
             )}
+            <View>
+                <Button onPress={() => navigation.navigate('AddISA')} title='Add Data' />
+            </View>
         </View>
     )
 }
