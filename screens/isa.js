@@ -51,11 +51,15 @@ export default function ISA({ navigation }) {
     const [showChart, setShowChart] = useState(false);
 
     const onChange = async (event, selectedDate) => {
-        const currentDate = selectedDate || date;
+        const currentDate = selectedDate;
+        console.log(currentDate);
         setShowPicker(Platform.OS === 'ios');
         setDate(currentDate);
         graphData = await queryDB(currentDate);
-        if (graphData.length > 0) setShowChart(true);
+        if (graphData.length > 0) {
+            setShowChart(false);
+            setShowChart(true);
+        }
         else setShowChart(false);
     }
 
