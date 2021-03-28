@@ -6,7 +6,7 @@ import {
     Button
 } from 'react-native';
 import { globalStyles } from '../styles/global';
-import { VictoryChart, VictoryGroup, VictoryLine, VictoryScatter, VictoryTheme } from 'victory-native';
+import { VictoryChart, VictoryGroup, VictoryLine, VictoryScatter, VictoryTheme, VictoryAxis } from 'victory-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
 import * as SQLite from 'expo-sqlite';
@@ -14,6 +14,8 @@ import * as SQLite from 'expo-sqlite';
 const db = SQLite.openDatabase('db.db');
 
 var graphData = [];
+var compareData = [];
+var xAxis = [];
 
 // Retrieve data from database
 async function queryDB(date) {
@@ -25,12 +27,16 @@ async function queryDB(date) {
                 tx.executeSql('SELECT workloadRating, dateTime from isa ORDER BY dateTime', [], (_, { rows }) => {
                     for (var i=0; i < rows._array.length; i++) {
                         if (rows._array[i].dateTime.slice(0, 10) == Moment(date).format('DD/MM/YYYY')) {
+                            var dT = rows._array[i].dateTime.slice(11, 16);
                             data.push({
-                                x: rows._array[i].dateTime.slice(11, 16),
+                                x: dT,
                                 y: rows._array[i].workloadRating
-                            });    
+                            });  
+                            if (xAxis.includes(dT) == false) xAxis.push(dT);
                         }
                     }
+                    xAxis = xAxis.sort();
+                    
                     resolve(data);
                 });
                 
@@ -43,75 +49,98 @@ async function queryDB(date) {
 
 export default function ISA({ navigation }) {
 
-    var graphWidth = graphData.length*60 + 100;
+    var graphWidth = xAxis.length*60 + 100;
 
-    const [date, setDate] = useState(new Date());
+    const [date1, setDate1] = useState(new Date());
+    const [date2, setDate2] = useState(new Date());
     const [mode, setMode] = useState('date');
-    const [showPicker, setShowPicker] = useState(false);
-    const [showChart, setShowChart] = useState(false);
+    const [showPicker1, setShowPicker1] = useState(false);
+    const [showPicker2, setShowPicker2] = useState(false);
+    const [showChart1, setShowChart1] = useState(false);
+    const [showChart2, setShowChart2] = useState(false);
 
-    const onChange = async (event, selectedDate) => {
-        const currentDate = selectedDate;
-        console.log(currentDate);
-        setShowPicker(Platform.OS === 'ios');
-        setDate(currentDate);
-        graphData = await queryDB(currentDate);
-        if (graphData.length > 0) {
-            setShowChart(false);
-            setShowChart(true);
-        }
-        else setShowChart(false);
+    const onChangeDate = async (event, selectedDate) => {
+        setShowPicker1(Platform.OS === 'ios');
+        setDate1(selectedDate);
+        graphData = await queryDB(selectedDate);
+        setShowChart1(false);
+        if (graphData.length > 0) setShowChart1(true);
     }
 
-    const showMode = (currentMode) => {
-        setShowPicker(true);
-        setMode(currentMode);
-    };
+    const onChangeComp = async(event, selectedDate) => {
+        setShowPicker2(Platform.OS === 'ios');
+        setDate2(selectedDate);
+        compareData = await queryDB(selectedDate);
+
+        setShowChart1(false);
+        setShowChart1(true);
+        setShowChart2(false);
+        if (compareData.length > 0) setShowChart2(true);
+    }
     
     const showDatePicker = () => {
-        showMode('date');
+        setShowPicker1(true);
+        setMode('date');
     };
+
+    const showCompPicker = () => {
+        setShowPicker2(true);
+        setMode('date');
+    }
 
     return (
         <View style={globalStyles.container}>
-            <Text> {Moment(date).format('DD/MM/YYYY')} </Text>
+            <Text> {Moment(date1).format('DD/MM/YYYY')} </Text>
             <View>
-                <Button onPress={showDatePicker} title='Pick date' />
+                <Button title='Pick date' onPress={showDatePicker} />
             </View>
-            {showPicker && (<DateTimePicker
+            {showPicker1 && (<DateTimePicker
                 testID="dateTimePicker"
-                value={date}
+                value={date1}
                 mode={mode}
-                is24Hour={true}
                 display="default"
-                onChange={onChange}
+                onChange={onChangeDate}
+                />
+            )}
+            {showPicker2 && (<DateTimePicker
+                testID="dateTimePicker"
+                value={date2}
+                mode={mode}
+                display="default"
+                onChange={onChangeComp}
                 />
             )}
             {/* ScrollView for horizontal scrolling when there's lots of data */}
-            {showChart && (<View>
+            {showChart1 && (<View>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
                 <VictoryChart 
                     theme={VictoryTheme.material} 
                     height = {300} 
                     width={graphWidth} 
-                    domain={{ y: [1, 5] }}>
+                    >
+                    <VictoryAxis tickValues={xAxis} />
+                    <VictoryAxis dependentAxis domain={ [1, 5] } />
                     <VictoryGroup data={graphData}>
-                        <VictoryLine style={{
-                            data: { stroke: '#000' },
-                            parent: { border: '1px solid #ccc'}
-                            }} 
-                        />
+                        <VictoryLine style={{ data: { stroke: '#000' }}} />
                         <VictoryScatter style = {{ data: { fill: '#000' }}} />
                     </VictoryGroup>
+                    {showChart2 && (
+                        <VictoryGroup data={compareData}>
+                            <VictoryLine style={{ data: { stroke: '#00f' }}} />
+                            <VictoryScatter style = {{ data: { fill: '#00f' }}} />
+                        </VictoryGroup>
+                    )}
                 </VictoryChart>
             </ScrollView>
+            <Button title='Select Second Date' onPress={showCompPicker}/>
             </View>
             )}
-            {!showChart && (
-                <Text>No Data For {Moment(date).format('DD/MM/YYYY')}</Text>
+            {!showChart1 && (
+                <Text>No Data For {Moment(date1).format('DD/MM/YYYY')}</Text>
             )}
             <View>
-                <Button onPress={() => navigation.navigate('AddISA')} title='Add Data' />
+                {/* Could add this button into the header instead? As a '+' button */}
+                <Button title='Add Data' onPress={() => navigation.navigate('AddISA')} />
             </View>
         </View>
     )
