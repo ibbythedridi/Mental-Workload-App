@@ -15,5 +15,14 @@ export const globalStyles = StyleSheet.create({
       shadowOpacity: 1.0,
       elevation: 5,
       marginBottom: 20
+    },
+    input: {
+      height: 40,
+      borderWidth: 1,
+      marginBottom: 10,
+      padding: 5
+    },
+    button: {
+      marginVertical: 20
     }
   });

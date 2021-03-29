@@ -2,13 +2,16 @@ import React from 'react';
 import {
     View,
     Text,
-    ScrollView
+    ScrollView,
+    Dimensions
 } from 'react-native';
 import { globalStyles } from '../styles/global';
 import { VictoryBar, VictoryStack, VictoryLabel, VictoryChart, VictoryLegend } from 'victory-native';
 import * as SQLite from 'expo-sqlite';
 
 const db = SQLite.openDatabase('db.db');
+
+const windowWidth = Dimensions.get('window').width;
 
 // This function adds screen time to the right dictionary
 function addTime(time, interval, cat) {
@@ -56,6 +59,7 @@ export default function ScreenTime() {
             <Text> Screen Time</Text>
             <VictoryChart domainPadding={30} >
                 <VictoryLegend
+                    x = {windowWidth / 2 - 145}
                     title='Legend'
                     centerTitle
                     orientation='horizontal'

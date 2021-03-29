@@ -8,10 +8,6 @@ import { globalStyles } from '../styles/global';
 
 export default function Dashboard({ navigation }) {
 
-    const buttonPress = ()  => {
-        navigation.navigate('ISA');
-    }
-
     return (
         <View style={globalStyles.container}>
             <Text>Dashboard</Text>
