@@ -1,7 +1,6 @@
 import React from 'react';
 import Navigator from './routes/homeStack';
 import * as SQLite from 'expo-sqlite';
-
 const db = SQLite.openDatabase('db.db');
 
 export default function App() {

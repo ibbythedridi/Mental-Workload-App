@@ -26,7 +26,6 @@ export default function AddISA() {
 
     return (
         <View style={globalStyles.container}>
-            <Text>Add ISA</Text>
             <Text>Date</Text>
             <TextInput
                 style={globalStyles.input}

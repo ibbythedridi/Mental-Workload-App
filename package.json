@@ -26,6 +26,7 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
     "react-native-chart-kit": "^6.10.1",
+    "react-native-flash-message": "^0.1.23",
     "react-native-gesture-handler": "^1.10.1",
     "react-native-reanimated": "^1.13.2",
     "react-native-safe-area-context": "^3.1.9",

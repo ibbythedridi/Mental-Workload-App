@@ -3,19 +3,31 @@ import {
     View,
     Text,
     ScrollView,
-    Button
+    Button,
+    Dimensions
 } from 'react-native';
 import { globalStyles } from '../styles/global';
-import { VictoryChart, VictoryGroup, VictoryLine, VictoryScatter, VictoryTheme, VictoryAxis } from 'victory-native';
+import { VictoryChart, VictoryGroup, VictoryLine, VictoryScatter, VictoryTheme, VictoryAxis, VictoryLegend } from 'victory-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
+import FlashMessage from 'react-native-flash-message';
+import { showMessage, hideMessage } from "react-native-flash-message";
 import * as SQLite from 'expo-sqlite';
 
 const db = SQLite.openDatabase('db.db');
 
+const windowWidth = Dimensions.get('window').width;
+
+// Graph colours for each graph
+const colours = ['#000', '#f00'];
+
+// ISA data
 var graphData = [];
+// ISA data for comparison
 var compareData = [];
+// X-Axis values
 var xAxis = [];
+var legend = [];
 
 // Retrieve data from database
 async function queryDB(date) {
@@ -26,17 +38,21 @@ async function queryDB(date) {
             try {
                 tx.executeSql('SELECT workloadRating, dateTime from isa ORDER BY dateTime', [], (_, { rows }) => {
                     for (var i=0; i < rows._array.length; i++) {
+                        // For all returned rows which match the date we're after
+                        // push the time and workload ratings to the data array
                         if (rows._array[i].dateTime.slice(0, 10) == Moment(date).format('DD/MM/YYYY')) {
                             var dT = rows._array[i].dateTime.slice(11, 16);
                             data.push({
                                 x: dT,
                                 y: rows._array[i].workloadRating
                             });  
+                            // Push all unique times to the x axis array
                             if (xAxis.includes(dT) == false) xAxis.push(dT);
                         }
                     }
+                    // Sort the x axis array to allow accurate comparison of data
                     xAxis = xAxis.sort();
-                    
+
                     resolve(data);
                 });
                 
@@ -61,21 +77,80 @@ export default function ISA({ navigation }) {
 
     const onChangeDate = async (event, selectedDate) => {
         setShowPicker1(Platform.OS === 'ios');
-        setDate1(selectedDate);
-        graphData = await queryDB(selectedDate);
-        setShowChart1(false);
-        if (graphData.length > 0) setShowChart1(true);
+        var dateSelect = Moment(selectedDate).format('DD/MM/YYYY');
+        // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
+        if (selectedDate) {
+            setDate1(selectedDate);
+            xAxis = [];
+            graphData = await queryDB(selectedDate);
+
+            {/* Dynamically generate the legend */}
+            // If the legend hasn't been populated for this graph yet, push data
+            // Otherwise replace data
+            if (legend.length == 0) {
+                legend.push({
+                    name: dateSelect,
+                    symbol: { fill: colours[0] }
+                })
+            } else {
+                legend[0].name = dateSelect;
+            }
+
+            setShowChart1(false);
+            if (graphData.length > 0) setShowChart1(true);
+            else {
+                compareData = [];
+                legend = [];
+                showMessage({
+                    message: "No data for: " + dateSelect,
+                    type: 'warning',
+                });
+            }
+        }
+        
     }
 
     const onChangeComp = async(event, selectedDate) => {
         setShowPicker2(Platform.OS === 'ios');
-        setDate2(selectedDate);
-        compareData = await queryDB(selectedDate);
+        var dateComp = Moment(selectedDate).format('DD/MM/YYYY');
+        // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
+        if (selectedDate) {
+            if (dateComp != Moment(date1).format('DD/MM/YYYY')) {
+                setDate2(selectedDate);
+                compareData = await queryDB(selectedDate);
 
-        setShowChart1(false);
-        setShowChart1(true);
-        setShowChart2(false);
-        if (compareData.length > 0) setShowChart2(true);
+                {/* Dynamically generate the legend */}
+                // If the legend hasn't been populated for this graph yet, push data
+                 // Otherwise replace data
+                if (legend.length == 1) {
+                    legend.push({
+                        name: dateComp,
+                        symbol: { fill: colours[1] }
+                    })
+                } else {
+                    legend[1].name = dateComp;
+                }
+
+                setShowChart2(false);
+                if (compareData.length > 0) setShowChart2(true);
+                else {
+                    compareData = [];
+                    legend.pop();
+                    showMessage({
+                        message: "No data for: " + dateComp,
+                        type: 'warning',
+                    });
+                }
+
+                setShowChart1(false);
+                setShowChart1(true); 
+            } else {
+                showMessage({
+                    message: "Cannot compare against the same date",
+                    type: 'warning',
+                });
+            }
+        }
     }
     
     const showDatePicker = () => {
@@ -90,7 +165,6 @@ export default function ISA({ navigation }) {
 
     return (
         <View style={globalStyles.container}>
-            <Text> {Moment(date1).format('DD/MM/YYYY')} </Text>
             <View>
                 <Button title='Pick date' onPress={showDatePicker} />
             </View>
@@ -118,16 +192,24 @@ export default function ISA({ navigation }) {
                     height = {300} 
                     width={graphWidth} 
                     >
+                    <VictoryLegend
+                        x={windowWidth / 2 - 100}
+                        title='Legend'
+                        centerTitle
+                        orientation='horizontal'
+                        data={legend}
+                    />
                     <VictoryAxis tickValues={xAxis} />
                     <VictoryAxis dependentAxis domain={ [1, 5] } />
                     <VictoryGroup data={graphData}>
-                        <VictoryLine style={{ data: { stroke: '#000' }}} />
-                        <VictoryScatter style = {{ data: { fill: '#000' }}} />
+                        <VictoryLine style={{ data: { stroke: colours[0] }}} />
+                        <VictoryScatter style = {{ data: { fill: colours[0] }}} />
                     </VictoryGroup>
+                    
                     {showChart2 && (
-                        <VictoryGroup data={compareData}>
-                            <VictoryLine style={{ data: { stroke: '#00f' }}} />
-                            <VictoryScatter style = {{ data: { fill: '#00f' }}} />
+                        <VictoryGroup data={compareData}>  
+                            <VictoryLine style={{ data: { stroke: colours[1] }}} />
+                            <VictoryScatter style = {{ data: { fill: colours[1] }}} />
                         </VictoryGroup>
                     )}
                 </VictoryChart>
@@ -135,13 +217,11 @@ export default function ISA({ navigation }) {
             <Button title='Select Second Date' onPress={showCompPicker}/>
             </View>
             )}
-            {!showChart1 && (
-                <Text>No Data For {Moment(date1).format('DD/MM/YYYY')}</Text>
-            )}
             <View>
                 {/* Could add this button into the header instead? As a '+' button */}
                 <Button title='Add Data' onPress={() => navigation.navigate('AddISA')} />
             </View>
+            <FlashMessage position='bottom' />
         </View>
     )
 }

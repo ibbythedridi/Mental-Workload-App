@@ -21,5 +21,8 @@ export const globalStyles = StyleSheet.create({
       borderWidth: 1,
       marginBottom: 10,
       padding: 5
+    },
+    button: {
+      marginVertical: 20
     }
   });
