@@ -3,6 +3,24 @@ import Moment from 'moment';
 
 const db = SQLite.openDatabase('db.db');
 
+// This function adds screen time to the right dictionary
+// Used by getScreenTimeCondensed class function
+function addTime(time, interval, cat) {
+    if (!(cat.some(i => i.x == interval))) {
+        cat.push({
+            x: interval,
+            y: time
+        });
+    }
+    else {
+        for (var j=0; j<cat.length; j++) {
+            if (cat[j].x == interval) {
+                cat[j].y += time;
+            }
+        }
+    }
+}
+
 export default class DBHelper {
     
     // Creates database tables
@@ -105,5 +123,67 @@ export default class DBHelper {
         db.transaction(tx => {
             tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, ?, ?)', [date + '-' + time, rating, summary]);
         })
+    }
+
+    // Get screen time data condensed
+    getScreenTimeCondensed() {
+        var productive = [];
+        var neutral = [];
+        var unproductive = [];
+
+        db.transaction(tx => {
+            tx.executeSql('SELECT name, date, interval, time, category from screenTime ORDER BY category', [], (_, { rows }) => {
+                for (var i=0; i < rows._array.length; i++) {
+                    let time = rows._array[i].time;
+                    let interval = rows._array[i].interval.slice(0,5);
+                    let category = rows._array[i].category;
+        
+                    // O(N^2) need more efficient
+                    if (category == 'productive') addTime(time, interval, productive);
+                    else if (category == 'neutral') addTime(time, interval, neutral);
+                    else if (category == 'unproductive') addTime(time, interval, unproductive);
+                }
+            });
+        });
+
+        return([productive, neutral, unproductive]);
+    }
+
+    // Gets sleep data
+    getSleepData() {
+        let hoursInBedData = [];
+        let hoursUntilSleepData = [];
+        let timesWokenUpData = [];
+        let sleepQualityData = [];
+
+        db.transaction(tx => {
+            tx.executeSql('SELECT date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality from sleep', [], (_, { rows }) => {
+                for (var i=0; i < (rows._array.length); i++) {
+                    var date = rows._array[i].date.slice(0, 5);
+        
+                    hoursInBedData.push({
+                        x: date,
+                        y: rows._array[i].timeInBed
+                    });
+        
+                    hoursUntilSleepData.push({
+                        x: date,
+                        y: rows._array[i].timeTilSleep
+                    });
+        
+                    timesWokenUpData.push({
+                        x: date,
+                        y: rows._array[i].timesWokenUp
+                    });
+        
+                    sleepQualityData.push({
+                        x: date,
+                        y: rows._array[i].sleepQuality
+                    });
+                }
+            });
+        });
+
+        return([hoursInBedData, hoursUntilSleepData, timesWokenUpData, sleepQualityData]);
     }
 }

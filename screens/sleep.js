@@ -6,9 +6,9 @@ import {
 } from 'react-native';
 import { globalStyles } from '../styles/global';
 import { VictoryChart, VictoryGroup, VictoryLegend, VictoryLine, VictoryScatter, VictoryTheme } from 'victory-native';
-import * as SQLite from 'expo-sqlite';
+import DBHelper from '../DBHelper';
 
-const db = SQLite.openDatabase('db.db');
+const dbHelper = new DBHelper();
 
 var colours = {
     'hoursInBed': '#000',
@@ -17,41 +17,12 @@ var colours = {
     'sleepQuality': '#00ff00'
 }
 
-var hoursInBedData = [];
-var hoursUntilSleepData = [];
-var timesWokenUpData = [];
-var sleepQualityData = [];
+var tempData = dbHelper.getSleepData();
 
-// Retrieve data from database
-//React.useEffect(() => {
-db.transaction(tx => {
-    tx.executeSql('SELECT date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality from sleep', [], (_, { rows }) => {
-        for (var i=0; i < (rows._array.length); i++) {
-            var date = rows._array[i].date.slice(0, 5);
-
-            hoursInBedData.push({
-                x: date,
-                y: rows._array[i].timeInBed
-            });
-
-            hoursUntilSleepData.push({
-                x: date,
-                y: rows._array[i].timeTilSleep
-            });
-
-            timesWokenUpData.push({
-                x: date,
-                y: rows._array[i].timesWokenUp
-            });
-
-            sleepQualityData.push({
-                x: date,
-                y: rows._array[i].sleepQuality
-            });
-        }
-    });
-});
-//}, []);
+var hoursInBedData = tempData[0],
+    hoursUntilSleepData = tempData[1],
+    timesWokenUpData = tempData[2],
+    sleepQualityData = tempData[3];
 
 export default function Sleep() {
 
