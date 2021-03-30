@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
     View,
-    Text,
     ScrollView,
     Button,
     Dimensions
@@ -11,16 +10,18 @@ import { VictoryChart, VictoryGroup, VictoryLine, VictoryScatter, VictoryTheme, 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
 import FlashMessage from 'react-native-flash-message';
-import { showMessage, hideMessage } from "react-native-flash-message";
-import * as SQLite from 'expo-sqlite';
+import { showMessage } from "react-native-flash-message";
+import DBHelper from '../DBHelper';
 
-const db = SQLite.openDatabase('db.db');
+const dbHelper = new DBHelper();
 
 const windowWidth = Dimensions.get('window').width;
 
 // Graph colours for each graph
 const colours = ['#000', '#f00'];
 
+// Temporary variable which holds information from database query
+var tempData = [];
 // ISA data
 var graphData = [];
 // ISA data for comparison
@@ -28,40 +29,6 @@ var compareData = [];
 // X-Axis values
 var xAxis = [];
 var legend = [];
-
-// Retrieve data from database
-async function queryDB(date) {
-    let data = [];
-    // Promise placed here to make sure the full database transaction has been complete before continuing 
-    return new Promise((resolve, reject) => 
-        db.transaction(tx => {
-            try {
-                tx.executeSql('SELECT workloadRating, dateTime from isa ORDER BY dateTime', [], (_, { rows }) => {
-                    for (var i=0; i < rows._array.length; i++) {
-                        // For all returned rows which match the date we're after
-                        // push the time and workload ratings to the data array
-                        if (rows._array[i].dateTime.slice(0, 10) == Moment(date).format('DD/MM/YYYY')) {
-                            var dT = rows._array[i].dateTime.slice(11, 16);
-                            data.push({
-                                x: dT,
-                                y: rows._array[i].workloadRating
-                            });  
-                            // Push all unique times to the x axis array
-                            if (xAxis.includes(dT) == false) xAxis.push(dT);
-                        }
-                    }
-                    // Sort the x axis array to allow accurate comparison of data
-                    xAxis = xAxis.sort();
-
-                    resolve(data);
-                });
-                
-            } catch (error) {
-                reject(error);
-            }
-            
-    }));
-}
 
 export default function ISA({ navigation }) {
 
@@ -81,8 +48,10 @@ export default function ISA({ navigation }) {
         // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
         if (selectedDate) {
             setDate1(selectedDate);
-            xAxis = [];
-            graphData = await queryDB(selectedDate);
+
+            tempData = await dbHelper.getISAData(selectedDate, xAxis);
+            graphData = tempData[0];
+            xAxis = tempData[1];
 
             {/* Dynamically generate the legend */}
             // If the legend hasn't been populated for this graph yet, push data
@@ -117,7 +86,10 @@ export default function ISA({ navigation }) {
         if (selectedDate) {
             if (dateComp != Moment(date1).format('DD/MM/YYYY')) {
                 setDate2(selectedDate);
-                compareData = await queryDB(selectedDate);
+                
+                tempData = await dbHelper.getISAData(selectedDate, xAxis);
+                compareData = tempData[0];
+                xAxis = tempData[1];
 
                 {/* Dynamically generate the legend */}
                 // If the legend hasn't been populated for this graph yet, push data

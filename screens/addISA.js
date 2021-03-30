@@ -6,16 +6,9 @@ import {
     TextInput
 } from 'react-native';
 import { globalStyles } from '../styles/global';
-import * as SQLite from 'expo-sqlite';
+import DBHelper from '../DBHelper';
 
-const db = SQLite.openDatabase('db.db');
-
-function submitISA(date, time, rating, summary) {
-    db.transaction(tx => {
-        tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, ?, ?)', [date + '-' + time, rating, summary]);
-    })
-    console.log("Submitted");
-}
+const dbHelper = new DBHelper();
 
 export default function AddISA() {
 
@@ -58,7 +51,7 @@ export default function AddISA() {
                 placeholder="Summary of task"
             />
 
-            <Button title='Submit' onPress={() => submitISA(date, time, rating, summary)} />
+            <Button title='Submit' onPress={() => dbHelper.insertISA(date, time, rating, summary)} />
         </View>
     )
 }
