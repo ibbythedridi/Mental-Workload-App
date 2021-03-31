@@ -9,7 +9,7 @@ it('renders settings correctly', () => {
 
 // This checks the correct component(s) are existent in the JSON
 describe("<Settings />", () => {
-  it('has 1 children', () => {
+  it('has 1 child', () => {
     const tree = renderer.create(<Settings />).toJSON();
     expect(tree.children.length).toBe(1);
   });
