@@ -16,9 +16,9 @@ const windowWidth = Dimensions.get('window').width;
 let tempData = dbHelper.getScreenTimeCondensed();
 
 // Categories
-var productive = tempData[0],
-    neutral = tempData[1],
-    unproductive = tempData[2];
+var productive = tempData ? tempData[0] : [],
+    neutral = tempData ? tempData[1] : [],
+    unproductive = tempData ? tempData[2] : [];
 
 // Productive, Neutral, Unproductive
 var colours=['#00ff00', '#add8e6', '#ff0000'];

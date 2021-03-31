@@ -19,10 +19,10 @@ var colours = {
 
 var tempData = dbHelper.getSleepData();
 
-var hoursInBedData = tempData[0],
-    hoursUntilSleepData = tempData[1],
-    timesWokenUpData = tempData[2],
-    sleepQualityData = tempData[3];
+var hoursInBedData = tempData ? tempData[0] : [],
+    hoursUntilSleepData = tempData ? tempData[1] : [],
+    timesWokenUpData = tempData ? tempData[2] : [],
+    sleepQualityData = tempData ? tempData[3] : [];
 
 export default function Sleep() {
 
