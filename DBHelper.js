@@ -130,23 +130,28 @@ export default class DBHelper {
         var productive = [];
         var neutral = [];
         var unproductive = [];
+        return new Promise((resolve, reject) => 
+            db.transaction(tx => {
+                try {
+                    tx.executeSql('SELECT name, date, interval, time, category from screenTime ORDER BY category', [], (_, { rows }) => {
+                        for (var i=0; i < rows._array.length; i++) {
+                            let time = rows._array[i].time;
+                            let interval = rows._array[i].interval.slice(0,5);
+                            let category = rows._array[i].category;
+                
+                            // O(N^2) need more efficient
+                            if (category == 'productive') addTime(time, interval, productive);
+                            else if (category == 'neutral') addTime(time, interval, neutral);
+                            else if (category == 'unproductive') addTime(time, interval, unproductive);
+                        }
 
-        db.transaction(tx => {
-            tx.executeSql('SELECT name, date, interval, time, category from screenTime ORDER BY category', [], (_, { rows }) => {
-                for (var i=0; i < rows._array.length; i++) {
-                    let time = rows._array[i].time;
-                    let interval = rows._array[i].interval.slice(0,5);
-                    let category = rows._array[i].category;
-        
-                    // O(N^2) need more efficient
-                    if (category == 'productive') addTime(time, interval, productive);
-                    else if (category == 'neutral') addTime(time, interval, neutral);
-                    else if (category == 'unproductive') addTime(time, interval, unproductive);
+                        resolve([productive, neutral, unproductive]);
+                    });
+                } catch(error) {
+                    reject(error);
                 }
-            });
-        });
-
-        return([productive, neutral, unproductive]);
+                
+        }));
     }
 
     // Gets sleep data

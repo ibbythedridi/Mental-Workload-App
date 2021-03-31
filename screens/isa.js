@@ -36,7 +36,6 @@ export default function ISA({ navigation }) {
 
     const [date1, setDate1] = useState(new Date());
     const [date2, setDate2] = useState(new Date());
-    const [mode, setMode] = useState('date');
     const [showPicker1, setShowPicker1] = useState(false);
     const [showPicker2, setShowPicker2] = useState(false);
     const [showChart1, setShowChart1] = useState(false);
@@ -44,7 +43,6 @@ export default function ISA({ navigation }) {
 
     const onChangeDate = async (event, selectedDate) => {
         setShowPicker1(Platform.OS === 'ios');
-        var dateSelect = Moment(selectedDate).format('DD/MM/YYYY');
         // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
         if (selectedDate) {
             setDate1(selectedDate);
@@ -52,6 +50,8 @@ export default function ISA({ navigation }) {
             tempData = await dbHelper.getISAData(selectedDate, xAxis);
             graphData = tempData[0];
             xAxis = tempData[1];
+
+            let dateSelect = Moment(selectedDate).format('DD/MM/YYYY');
 
             {/* Dynamically generate the legend */}
             // If the legend hasn't been populated for this graph yet, push data
@@ -127,31 +127,27 @@ export default function ISA({ navigation }) {
     
     const showDatePicker = () => {
         setShowPicker1(true);
-        setMode('date');
     };
 
     const showCompPicker = () => {
         setShowPicker2(true);
-        setMode('date');
     }
 
     return (
         <View style={globalStyles.container}>
-            <View>
-                <Button title='Pick date' onPress={showDatePicker} />
-            </View>
+            <Button title='Pick date' onPress={showDatePicker} />
             {showPicker1 && (<DateTimePicker
-                testID="dateTimePicker"
+                testID="dateTimePicker1"
                 value={date1}
-                mode={mode}
+                mode={'date'}
                 display="default"
                 onChange={onChangeDate}
                 />
             )}
             {showPicker2 && (<DateTimePicker
-                testID="dateTimePicker"
+                testID="dateTimePicker2"
                 value={date2}
-                mode={mode}
+                mode={'date'}
                 display="default"
                 onChange={onChangeComp}
                 />
