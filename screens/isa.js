@@ -9,8 +9,7 @@ import { globalStyles } from '../styles/global';
 import { VictoryChart, VictoryGroup, VictoryLine, VictoryScatter, VictoryTheme, VictoryAxis, VictoryLegend } from 'victory-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
-import FlashMessage from 'react-native-flash-message';
-import { showMessage } from "react-native-flash-message";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 import DBHelper from '../DBHelper';
 
 const dbHelper = new DBHelper();
@@ -45,13 +44,13 @@ export default function ISA({ navigation }) {
         setShowPicker1(Platform.OS === 'ios');
         // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
         if (selectedDate) {
+            let dateSelect = Moment(selectedDate).format('DD/MM/YYYY');
+
             setDate1(selectedDate);
 
-            tempData = await dbHelper.getISAData(selectedDate, xAxis);
+            tempData = await dbHelper.getISAData(dateSelect, xAxis);
             graphData = tempData[0];
             xAxis = tempData[1];
-
-            let dateSelect = Moment(selectedDate).format('DD/MM/YYYY');
 
             {/* Dynamically generate the legend */}
             // If the legend hasn't been populated for this graph yet, push data
@@ -81,13 +80,15 @@ export default function ISA({ navigation }) {
 
     const onChangeComp = async(event, selectedDate) => {
         setShowPicker2(Platform.OS === 'ios');
-        var dateComp = Moment(selectedDate).format('DD/MM/YYYY');
         // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
         if (selectedDate) {
+            let dateComp = Moment(selectedDate).format('DD/MM/YYYY');
+            
+            // If the chosen date is different to the first date, the second graph is shown
             if (dateComp != Moment(date1).format('DD/MM/YYYY')) {
                 setDate2(selectedDate);
                 
-                tempData = await dbHelper.getISAData(selectedDate, xAxis);
+                tempData = await dbHelper.getISAData(dateComp, xAxis);
                 compareData = tempData[0];
                 xAxis = tempData[1];
 
@@ -185,10 +186,8 @@ export default function ISA({ navigation }) {
             <Button title='Select Second Date' onPress={showCompPicker}/>
             </View>
             )}
-            <View>
-                {/* Could add this button into the header instead? As a '+' button */}
-                <Button title='Add Data' onPress={() => navigation.navigate('AddISA')} />
-            </View>
+            {/* Could add this button into the header instead? As a '+' button */}
+            <Button title='Add Data' onPress={() => navigation.navigate('AddISA')} />
             <FlashMessage position='bottom' />
         </View>
     )

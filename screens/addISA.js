@@ -3,19 +3,39 @@ import {
     View,
     Text,
     Button,
-    TextInput
+    TextInput,
+    Keyboard
 } from 'react-native';
 import { globalStyles } from '../styles/global';
 import DBHelper from '../DBHelper';
+import { showMessage } from 'react-native-flash-message';
 
 const dbHelper = new DBHelper();
 
-export default function AddISA() {
+export default function AddISA({ navigation }) {
 
     const [date, setDate] = React.useState('');
     const [time, setTime] = React.useState('');
     const [rating, setRating] = React.useState('');
     const [summary, setSummary] = React.useState('');
+
+    const submit = async () => {
+        Keyboard.dismiss();
+        let subISA = await dbHelper.insertISA(date, time, rating, summary);
+
+        if (subISA == true) {
+            showMessage({
+                message: 'Successfully submitted data',
+                type: 'success',
+            });
+        } else {
+            showMessage({
+                message: 'Something went wrong',
+                type: 'danger',
+            });
+        }
+        navigation.goBack();
+    }
 
     return (
         <View style={globalStyles.container}>
@@ -51,7 +71,7 @@ export default function AddISA() {
                 placeholder="Summary of task"
             />
 
-            <Button title='Submit' onPress={() => dbHelper.insertISA(date, time, rating, summary)} />
+            <Button title='Submit' onPress={submit} />
         </View>
     )
 }

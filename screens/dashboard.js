@@ -4,6 +4,7 @@ import {
     Text,
     Button
 } from 'react-native';
+import FlashMessage from 'react-native-flash-message';
 import { globalStyles } from '../styles/global';
 
 export default function Dashboard({ navigation }) {

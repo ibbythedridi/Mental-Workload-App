@@ -18,8 +18,8 @@ it('renders correctly', () => {
 
 // This checks the correct component(s) are existent in the JSON (views and buttons)
 describe("<ScreenTime />", () => {
-  it('has 2 children', () => {
+  it('has 3 children', () => {
     const tree = renderer.create(<ScreenTime />).toJSON();
-    expect(tree.children.length).toBe(2);
+    expect(tree.children.length).toBe(3);
   });
 });

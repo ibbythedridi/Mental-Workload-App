@@ -9,7 +9,7 @@ import { VictoryBar, VictoryStack, VictoryLabel, VictoryChart, VictoryLegend } f
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DBHelper from '../DBHelper';
 import Moment from 'moment';
-import { showMessage } from 'react-native-flash-message';
+import FlashMessage, { showMessage } from 'react-native-flash-message';
 
 const dbHelper = new DBHelper();
 
@@ -30,7 +30,7 @@ var legend = [
     { name: 'Unproductive', symbol: { fill: colours[2] }}
 ];
 
-export default function ScreenTime() {
+export default function ScreenTime({ navigation }) {
 
     const [date, setDate] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
@@ -44,13 +44,14 @@ export default function ScreenTime() {
             setDate(selectedDate);
 
             // Screen time data retrieved
-            let tempData = await dbHelper.getScreenTimeCondensed();
+            let tempData = await dbHelper.getScreenTimeCondensed(dateSelect);
 
             // Categories
             productive = tempData ? tempData[0] : [],
                 neutral = tempData ? tempData[1] : [],
                 unproductive = tempData ? tempData[2] : [];
 
+            console.log(unproductive);
             setShowChart(false);
             if (productive.length > 0 ||
                 neutral.length > 0 ||
@@ -96,6 +97,8 @@ export default function ScreenTime() {
                     </VictoryStack>
                 </VictoryChart>
             )}
+            <Button title='Add Data' onPress={() => navigation.navigate('AddScreenTime')} />
+            <FlashMessage position='bottom' />
         </View>
     )
 }

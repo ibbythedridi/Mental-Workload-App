@@ -53,8 +53,6 @@ export default class DBHelper {
             */
             tx.executeSql('CREATE TABLE IF NOT EXISTS screenTime (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, date TEXT NOT NULL, interval TEXT NOT NULL, time INTEGER NOT NULL, category TEXT NOT NULL)'
             );
-            
-            console.log("initialised database!");
         });
     }   
 
@@ -95,7 +93,7 @@ export default class DBHelper {
                         for (var i=0; i < rows._array.length; i++) {
                             // For all returned rows which match the date we're after
                             // push the time and workload ratings to the data array
-                            if (rows._array[i].dateTime.slice(0, 10) == Moment(date).format('DD/MM/YYYY')) {
+                            if (rows._array[i].dateTime.slice(0, 10) == date) {
                                 var dT = rows._array[i].dateTime.slice(11, 16);
                                 data.push({
                                     x: dT,
@@ -118,15 +116,8 @@ export default class DBHelper {
         }));
     }
 
-    // Insert ISA data
-    insertISA(date, time, rating, summary) {
-        db.transaction(tx => {
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, ?, ?)', [date + '-' + time, rating, summary]);
-        })
-    }
-
     // Get screen time data condensed
-    getScreenTimeCondensed() {
+    getScreenTimeCondensed(date) {
         var productive = [];
         var neutral = [];
         var unproductive = [];
@@ -135,14 +126,16 @@ export default class DBHelper {
                 try {
                     tx.executeSql('SELECT name, date, interval, time, category from screenTime ORDER BY category', [], (_, { rows }) => {
                         for (var i=0; i < rows._array.length; i++) {
-                            let time = rows._array[i].time;
-                            let interval = rows._array[i].interval.slice(0,5);
-                            let category = rows._array[i].category;
-                
-                            // O(N^2) need more efficient
-                            if (category == 'productive') addTime(time, interval, productive);
-                            else if (category == 'neutral') addTime(time, interval, neutral);
-                            else if (category == 'unproductive') addTime(time, interval, unproductive);
+                            if (rows._array[i].date == date) {
+                                let time = rows._array[i].time;
+                                let interval = rows._array[i].interval.slice(0,5);
+                                let category = rows._array[i].category;
+                    
+                                // O(N^2) need more efficient
+                                if (category == 'productive') addTime(time, interval, productive);
+                                else if (category == 'neutral') addTime(time, interval, neutral);
+                                else if (category == 'unproductive') addTime(time, interval, unproductive);
+                            }
                         }
 
                         resolve([productive, neutral, unproductive]);
@@ -190,5 +183,35 @@ export default class DBHelper {
         });
 
         return([hoursInBedData, hoursUntilSleepData, timesWokenUpData, sleepQualityData]);
+    }
+
+    // Insert ISA Data
+    insertISA(date, time, rating, summary) {
+        return new Promise((resolve, reject) =>
+            db.transaction(tx => {
+                try {
+                    tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, ?, ?)', [date + '-' + time, rating, summary]);
+                    resolve(true);
+                } catch(error) {
+                    reject(error);
+                }
+                
+            })
+        )
+        
+    }
+
+    // Insert Screen Time Data
+    insertScreenTime(name, date, interval, time, category) {
+        return new Promise((resolve, reject) =>
+            db.transaction(tx => {
+                try {
+                    tx.executeSql('INSERT into screenTime (name, date, interval, time, category) values (?, ?, ?, ?, ?)', [name, date, interval, time, category]);
+                    resolve(true);
+                } catch(error) {
+                    reject(error);
+                }
+            })
+        )
     }
 }
