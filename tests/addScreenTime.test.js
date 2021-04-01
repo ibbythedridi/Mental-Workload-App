@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import AddScreenTime from '../screens/addScreenTime';
 
+
 it('renders correctly', () => {
     const tree = renderer.create(<AddScreenTime />).toJSON();
     expect(tree).toMatchSnapshot();

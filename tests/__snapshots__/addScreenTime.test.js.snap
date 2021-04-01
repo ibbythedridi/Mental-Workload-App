@@ -90,313 +90,54 @@ exports[`renders correctly 1`] = `
   </Text>
   <View
     style={
-      Array [
-        Object {
-          "height": 40,
-          "marginBottom": 120,
-        },
-        Object {
-          "zIndex": 5000,
-        },
-      ]
+      Object {
+        "borderWidth": 1,
+        "marginBottom": 0,
+        "paddingBottom": 150,
+      }
     }
   >
     <View
-      accessible={true}
-      focusable={true}
-      onClick={[Function]}
-      onLayout={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
       style={
         Object {
-          "alignItems": "center",
-          "backgroundColor": "#fff",
-          "borderBottomLeftRadius": 5,
-          "borderBottomRightRadius": 5,
-          "borderColor": "#dfdfdf",
-          "borderTopLeftRadius": 5,
-          "borderTopRightRadius": 5,
-          "borderWidth": 1,
-          "flex": 1,
-          "flexDirection": "row",
-          "opacity": 1,
-          "paddingHorizontal": 10,
-          "paddingVertical": 5,
+          "height": 40,
         }
       }
     >
-      <Text
-        style={
+      <RNCPicker
+        items={
           Array [
             Object {
-              "color": "#000",
-            },
-            Object {},
-            Object {
-              "flex": 1,
-              "opacity": 1,
+              "label": "Productive",
+              "testID": undefined,
+              "textColor": undefined,
+              "value": "productive",
             },
             Object {
-              "marginLeft": 5,
-              "marginRight": 0,
+              "label": "Neutral",
+              "testID": undefined,
+              "textColor": undefined,
+              "value": "neutral",
             },
-            [Function],
-            Object {},
-            false,
-            Object {},
-          ]
-        }
-      >
-        Select an item
-      </Text>
-      <View
-        style={
-          Array [
             Object {
-              "alignItems": "center",
-              "borderBottomLeftRadius": 0,
-              "borderTopLeftRadius": 0,
-              "flexDirection": "row",
-              "justifyContent": "center",
-              "paddingVertical": 8,
+              "label": "Unproductive",
+              "testID": undefined,
+              "textColor": undefined,
+              "value": "unproductive",
             },
           ]
         }
-      >
-        <View
-          style={
-            Array [
-              Object {},
-              Object {
-                "opacity": 1,
-              },
-            ]
-          }
-        >
-          <Text />
-        </View>
-      </View>
-    </View>
-    <View
-      style={
-        Array [
-          Object {
-            "alignItems": "center",
-            "backgroundColor": "#fff",
-            "borderBottomLeftRadius": 5,
-            "borderBottomRightRadius": 5,
-            "borderColor": "#dfdfdf",
-            "borderTopLeftRadius": 5,
-            "borderTopRightRadius": 5,
-            "borderWidth": 1,
-            "paddingHorizontal": 10,
-            "paddingVertical": 5,
-          },
-          Object {
-            "alignItems": "center",
-            "borderTopLeftRadius": 0,
-            "borderTopRightRadius": 0,
-            "justifyContent": "center",
-            "position": "absolute",
-            "width": "100%",
-          },
-          Object {
-            "backgroundColor": "#fafafa",
-          },
-          Object {
-            "borderWidth": 0,
-            "display": "none",
-            "position": "relative",
-          },
-          Object {
-            "maxHeight": 150,
-            "top": undefined,
-            "zIndex": 5000,
-          },
-        ]
-      }
-    >
-      <RCTScrollView
-        nestedScrollEnabled={true}
+        onChange={[Function]}
+        selectedIndex={1}
         style={
-          Object {
-            "width": "100%",
-          }
+          Array [
+            Object {
+              "height": 216,
+            },
+            undefined,
+          ]
         }
-      >
-        <View>
-          <View
-            onLayout={[Function]}
-          >
-            <View
-              accessible={true}
-              focusable={true}
-              onClick={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
-              style={
-                Object {
-                  "alignItems": "center",
-                  "flexDirection": "row",
-                  "justifyContent": "center",
-                  "opacity": 1,
-                  "paddingVertical": 8,
-                  "width": "100%",
-                }
-              }
-            >
-              <View
-                style={
-                  Object {
-                    "alignContent": "center",
-                    "flexDirection": "row",
-                  }
-                }
-              >
-                <View
-                  style={
-                    Object {
-                      "justifyContent": "center",
-                    }
-                  }
-                />
-                <Text
-                  style={
-                    Array [
-                      Object {},
-                      Object {},
-                      undefined,
-                      false,
-                      Object {},
-                    ]
-                  }
-                >
-                  Productive
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View
-            onLayout={[Function]}
-          >
-            <View
-              accessible={true}
-              focusable={true}
-              onClick={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
-              style={
-                Object {
-                  "alignItems": "center",
-                  "flexDirection": "row",
-                  "justifyContent": "center",
-                  "opacity": 1,
-                  "paddingVertical": 8,
-                  "width": "100%",
-                }
-              }
-            >
-              <View
-                style={
-                  Object {
-                    "alignContent": "center",
-                    "flexDirection": "row",
-                  }
-                }
-              >
-                <View
-                  style={
-                    Object {
-                      "justifyContent": "center",
-                    }
-                  }
-                />
-                <Text
-                  style={
-                    Array [
-                      Object {},
-                      Object {},
-                      undefined,
-                      false,
-                      Object {},
-                    ]
-                  }
-                >
-                  Neutral
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View
-            onLayout={[Function]}
-          >
-            <View
-              accessible={true}
-              focusable={true}
-              onClick={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
-              style={
-                Object {
-                  "alignItems": "center",
-                  "flexDirection": "row",
-                  "justifyContent": "center",
-                  "opacity": 1,
-                  "paddingVertical": 8,
-                  "width": "100%",
-                }
-              }
-            >
-              <View
-                style={
-                  Object {
-                    "alignContent": "center",
-                    "flexDirection": "row",
-                  }
-                }
-              >
-                <View
-                  style={
-                    Object {
-                      "justifyContent": "center",
-                    }
-                  }
-                />
-                <Text
-                  style={
-                    Array [
-                      Object {},
-                      Object {},
-                      undefined,
-                      false,
-                      Object {},
-                    ]
-                  }
-                >
-                  Unproductive
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-      </RCTScrollView>
+      />
     </View>
   </View>
   <View

@@ -4,15 +4,13 @@ import {
     Text,
     Button,
     TextInput,
-    Keyboard
+    Keyboard,
+    Platform
 } from 'react-native';
 import { globalStyles } from '../styles/global';
 import DBHelper from '../DBHelper';
 import { showMessage } from 'react-native-flash-message';
-import DropDownPicker from 'react-native-dropdown-picker';
-import Feather from 'react-native-vector-icons/Feather';
-
-Feather.loadFont();
+import { Picker } from '@react-native-picker/picker';
 
 const dbHelper = new DBHelper();
 
@@ -22,7 +20,7 @@ export default function AddScreenTime({ navigation }) {
     const [date, setDate] = React.useState('');
     const [interval, setInterval] = React.useState('');
     const [time, setTime] = React.useState('');
-    const [category, setCategory] = React.useState('');
+    const [category, setCategory] = React.useState('neutral');
 
     const submit = async () => {
         Keyboard.dismiss();
@@ -78,17 +76,27 @@ export default function AddScreenTime({ navigation }) {
             />
 
             <Text>Category</Text>
-            <DropDownPicker
-                items = {[
-                    {label: 'Productive', value: 'productive'},
-                    {label: 'Neutral', value: 'neutral'},
-                    {label: 'Unproductive', value: 'unproductive'}
-                ]}
-                defaultValue={category}
-                containerStyle={{height:40, marginBottom: 120}}
-                dropDownStyle={{backgroundColor: '#fafafa'}}
-                onChangeItem={item => setCategory(item.value)}
-            />
+            <View
+                style={{
+                    marginBottom: Platform.OS === 'ios' ? 0 : 10,
+                    paddingBottom: Platform.OS === 'ios' ? 150 : 0,
+                    borderWidth: 1
+                }}    
+            >
+                <Picker
+                    style={{
+                        height:40
+                    }}
+                    selectedValue={category}
+                    onValueChange={(category) => setCategory(category)}
+                >
+                    <Picker.Item label='Productive' value='productive' />
+                    <Picker.Item label='Neutral' value='neutral' />
+                    <Picker.Item label='Unproductive' value='unproductive' />
+                </Picker>
+            </View>
+            
+            
 
             <Button title='Submit' onPress={submit} />
         </View>
