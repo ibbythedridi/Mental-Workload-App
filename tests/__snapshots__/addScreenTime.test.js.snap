@@ -1,0 +1,185 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "flex": 1,
+      "padding": 10,
+    }
+  }
+>
+  <Text>
+    Program Name
+  </Text>
+  <TextInput
+    allowFontScaling={true}
+    onChangeText={[Function]}
+    placeholder="program name"
+    rejectResponderTermination={true}
+    style={
+      Object {
+        "borderWidth": 1,
+        "height": 40,
+        "marginBottom": 10,
+        "padding": 5,
+      }
+    }
+    underlineColorAndroid="transparent"
+    value=""
+  />
+  <Text>
+    Date
+  </Text>
+  <TextInput
+    allowFontScaling={true}
+    onChangeText={[Function]}
+    placeholder="DD/MM/YYYY"
+    rejectResponderTermination={true}
+    style={
+      Object {
+        "borderWidth": 1,
+        "height": 40,
+        "marginBottom": 10,
+        "padding": 5,
+      }
+    }
+    underlineColorAndroid="transparent"
+    value=""
+  />
+  <Text>
+    Interval
+  </Text>
+  <TextInput
+    allowFontScaling={true}
+    onChangeText={[Function]}
+    placeholder="hh:mm:ss-hh:mm:ss"
+    rejectResponderTermination={true}
+    style={
+      Object {
+        "borderWidth": 1,
+        "height": 40,
+        "marginBottom": 10,
+        "padding": 5,
+      }
+    }
+    underlineColorAndroid="transparent"
+    value=""
+  />
+  <Text>
+    Time
+  </Text>
+  <TextInput
+    allowFontScaling={true}
+    onChangeText={[Function]}
+    placeholder="seconds"
+    rejectResponderTermination={true}
+    style={
+      Object {
+        "borderWidth": 1,
+        "height": 40,
+        "marginBottom": 10,
+        "padding": 5,
+      }
+    }
+    underlineColorAndroid="transparent"
+    value=""
+  />
+  <Text>
+    Category
+  </Text>
+  <View
+    style={
+      Object {
+        "borderWidth": 1,
+        "marginBottom": 0,
+        "paddingBottom": 150,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "height": 40,
+        }
+      }
+    >
+      <RNCPicker
+        items={
+          Array [
+            Object {
+              "label": "Productive",
+              "testID": undefined,
+              "textColor": undefined,
+              "value": "productive",
+            },
+            Object {
+              "label": "Neutral",
+              "testID": undefined,
+              "textColor": undefined,
+              "value": "neutral",
+            },
+            Object {
+              "label": "Unproductive",
+              "testID": undefined,
+              "textColor": undefined,
+              "value": "unproductive",
+            },
+          ]
+        }
+        onChange={[Function]}
+        selectedIndex={1}
+        style={
+          Array [
+            Object {
+              "height": 216,
+            },
+            undefined,
+          ]
+        }
+      />
+    </View>
+  </View>
+  <View
+    accessibilityRole="button"
+    accessibilityState={Object {}}
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "opacity": 1,
+      }
+    }
+  >
+    <View
+      style={
+        Array [
+          Object {},
+        ]
+      }
+    >
+      <Text
+        style={
+          Array [
+            Object {
+              "color": "#007AFF",
+              "fontSize": 18,
+              "margin": 8,
+              "textAlign": "center",
+            },
+          ]
+        }
+      >
+        Submit
+      </Text>
+    </View>
+  </View>
+</View>
+`;

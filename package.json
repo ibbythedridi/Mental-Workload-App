@@ -13,6 +13,7 @@
     "@react-native-community/datetimepicker": "^3.0.0",
     "@react-native-community/hooks": "^2.6.0",
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-picker/picker": "^1.14.0",
     "@react-navigation/bottom-tabs": "^5.11.2",
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.12.8",
@@ -29,13 +30,13 @@
     "react-native-flash-message": "^0.1.23",
     "react-native-gesture-handler": "^1.10.1",
     "react-native-reanimated": "^1.13.2",
+    "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "^2.15.0",
     "react-native-svg": "^12.1.0",
     "react-native-web": "~0.13.12",
     "react-navigation": "^4.4.3",
     "react-navigation-stack": "^2.10.2",
-    "victory-native": "^35.3.1",
-    "react-native-safe-area-context": "3.1.4"
+    "victory-native": "^35.3.1"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
@@ -47,7 +48,7 @@
   "jest": {
     "preset": "jest-expo",
     "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*|victory-*|expo-sqlite)"
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*|victory-*|expo-sqlite|@react-native-picker/picker)"
     ]
   },
   "private": true

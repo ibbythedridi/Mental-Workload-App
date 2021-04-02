@@ -6,8 +6,9 @@ import ScreenTime from '../screens/screenTime';
 import Sleep from '../screens/sleep';
 import Settings from '../screens/settings';
 import AddISA from '../screens/addISA';
+import AddScreenTime from '../screens/addScreenTime.js';
 
-const screens = {
+const HomeStack = createStackNavigator({
     Dashboard: {
         screen: Dashboard
     },
@@ -25,9 +26,10 @@ const screens = {
     },
     AddISA: {
         screen: AddISA
+    },
+    AddScreenTime: {
+        screen: AddScreenTime
     }
-}
-
-const HomeStack = createStackNavigator(screens);
+});
 
 export default createAppContainer(HomeStack);

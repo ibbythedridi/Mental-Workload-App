@@ -9,8 +9,7 @@ import { globalStyles } from '../styles/global';
 import { VictoryChart, VictoryGroup, VictoryLine, VictoryScatter, VictoryTheme, VictoryAxis, VictoryLegend } from 'victory-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
-import FlashMessage from 'react-native-flash-message';
-import { showMessage } from "react-native-flash-message";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 import DBHelper from '../DBHelper';
 
 const dbHelper = new DBHelper();
@@ -36,7 +35,6 @@ export default function ISA({ navigation }) {
 
     const [date1, setDate1] = useState(new Date());
     const [date2, setDate2] = useState(new Date());
-    const [mode, setMode] = useState('date');
     const [showPicker1, setShowPicker1] = useState(false);
     const [showPicker2, setShowPicker2] = useState(false);
     const [showChart1, setShowChart1] = useState(false);
@@ -44,12 +42,13 @@ export default function ISA({ navigation }) {
 
     const onChangeDate = async (event, selectedDate) => {
         setShowPicker1(Platform.OS === 'ios');
-        var dateSelect = Moment(selectedDate).format('DD/MM/YYYY');
         // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
         if (selectedDate) {
+            let dateSelect = Moment(selectedDate).format('DD/MM/YYYY');
+
             setDate1(selectedDate);
 
-            tempData = await dbHelper.getISAData(selectedDate, xAxis);
+            tempData = await dbHelper.getISAData(dateSelect, xAxis);
             graphData = tempData[0];
             xAxis = tempData[1];
 
@@ -81,13 +80,15 @@ export default function ISA({ navigation }) {
 
     const onChangeComp = async(event, selectedDate) => {
         setShowPicker2(Platform.OS === 'ios');
-        var dateComp = Moment(selectedDate).format('DD/MM/YYYY');
         // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
         if (selectedDate) {
+            let dateComp = Moment(selectedDate).format('DD/MM/YYYY');
+            
+            // If the chosen date is different to the first date, the second graph is shown
             if (dateComp != Moment(date1).format('DD/MM/YYYY')) {
                 setDate2(selectedDate);
                 
-                tempData = await dbHelper.getISAData(selectedDate, xAxis);
+                tempData = await dbHelper.getISAData(dateComp, xAxis);
                 compareData = tempData[0];
                 xAxis = tempData[1];
 
@@ -127,31 +128,27 @@ export default function ISA({ navigation }) {
     
     const showDatePicker = () => {
         setShowPicker1(true);
-        setMode('date');
     };
 
     const showCompPicker = () => {
         setShowPicker2(true);
-        setMode('date');
     }
 
     return (
         <View style={globalStyles.container}>
-            <View>
-                <Button title='Pick date' onPress={showDatePicker} />
-            </View>
+            <Button title='Pick date' onPress={showDatePicker} />
             {showPicker1 && (<DateTimePicker
-                testID="dateTimePicker"
+                testID="dateTimePicker1"
                 value={date1}
-                mode={mode}
+                mode={'date'}
                 display="default"
                 onChange={onChangeDate}
                 />
             )}
             {showPicker2 && (<DateTimePicker
-                testID="dateTimePicker"
+                testID="dateTimePicker2"
                 value={date2}
-                mode={mode}
+                mode={'date'}
                 display="default"
                 onChange={onChangeComp}
                 />
@@ -189,10 +186,8 @@ export default function ISA({ navigation }) {
             <Button title='Select Second Date' onPress={showCompPicker}/>
             </View>
             )}
-            <View>
-                {/* Could add this button into the header instead? As a '+' button */}
-                <Button title='Add Data' onPress={() => navigation.navigate('AddISA')} />
-            </View>
+            {/* Could add this button into the header instead? As a '+' button */}
+            <Button title='Add Data' onPress={() => navigation.navigate('AddISA')} />
             <FlashMessage position='bottom' />
         </View>
     )

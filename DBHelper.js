@@ -1,5 +1,4 @@
 import * as SQLite from 'expo-sqlite';
-import Moment from 'moment';
 
 const db = SQLite.openDatabase('db.db');
 
@@ -53,8 +52,6 @@ export default class DBHelper {
             */
             tx.executeSql('CREATE TABLE IF NOT EXISTS screenTime (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, date TEXT NOT NULL, interval TEXT NOT NULL, time INTEGER NOT NULL, category TEXT NOT NULL)'
             );
-            
-            console.log("initialised database!");
         });
     }   
 
@@ -74,12 +71,28 @@ export default class DBHelper {
             tx.executeSql('INSERT INTO sleep (date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality) values (?, 8.5, 0, 0, 3)', ['04/04/2021']);
             tx.executeSql('INSERT INTO sleep (date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality) values (?, 9.5, 0.5, 2, 5)', ['05/04/2021']);
       
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 100, ?)', ['Microsoft Word', '01/04/2021', '10:30:00-11:00:00', 'productive']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 25, ?)', ['Adobe Reader', '01/04/2021', '10:30:00-11:00:00', 'productive']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 225, ?)', ['Microsoft Outlook', '01/04/2021', '10:30:00-11:00:00', 'productive']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 20, ?)', ['wordpress.com', '01/04/2021', '10:30:00-11:00:00', 'neutral']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 111, ?)', ['Photos', '01/04/2021', '10:30:00-11:00:00', 'neutral']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 20, ?)', ['youtube.com', '01/04/2021', '10:30:00-11:00:00', 'unproductive']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 120, ?)', ['Microsoft Word', '01/04/2021', '11:00:00-11:30:00', 'productive']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 25, ?)', ['Adobe Reader', '01/04/2021', '11:00:00-11:30:00', 'productive']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 125, ?)', ['Microsoft Outlook', '01/04/2021', '11:00:00-11:30:00', 'productive']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 20, ?)', ['wordpress.com', '01/04/2021', '11:00:00-11:30:00', 'neutral']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 11, ?)', ['Photos', '01/04/2021', '11:00:00-11:30:00', 'neutral']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 204, ?)', ['youtube.com', '01/04/2021', '11:00:00-11:30:00', 'unproductive']);
+
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 700, ?)', ['Microsoft Word', '01/04/2021', '11:30:00-12:00:00', 'productive']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 254, ?)', ['Adobe Reader', '01/04/2021', '11:30:00-12:00:00', 'productive']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 225, ?)', ['Microsoft Outlook', '01/04/2021', '11:30:00-12:00:00', 'productive']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 203, ?)', ['wordpress.com', '01/04/2021', '11:30:00-12:00:00', 'neutral']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 111, ?)', ['Photos', '01/04/2021', '11:30:00-12:00:00', 'neutral']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 202, ?)', ['youtube.com', '01/04/2021', '11:30:00-12:00:00', 'unproductive']);
+
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 100, ?)', ['Microsoft Word', '01/04/2021', '12:30:00-13:00:00', 'productive']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 25, ?)', ['Adobe Reader', '01/04/2021', '12:30:00-13:00:00', 'productive']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 225, ?)', ['Microsoft Outlook', '01/04/2021', '12:30:00-13:00:00', 'productive']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 20, ?)', ['wordpress.com', '01/04/2021', '12:30:00-13:00:00', 'neutral']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 111, ?)', ['Photos', '01/04/2021', '12:30:00-13:00:00', 'neutral']);
+            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 20, ?)', ['youtube.com', '01/04/2021', '12:30:00-13:00:00', 'unproductive']);
+
+            console.log("done");
         });
     }
 
@@ -95,7 +108,7 @@ export default class DBHelper {
                         for (var i=0; i < rows._array.length; i++) {
                             // For all returned rows which match the date we're after
                             // push the time and workload ratings to the data array
-                            if (rows._array[i].dateTime.slice(0, 10) == Moment(date).format('DD/MM/YYYY')) {
+                            if (rows._array[i].dateTime.slice(0, 10) == date) {
                                 var dT = rows._array[i].dateTime.slice(11, 16);
                                 data.push({
                                     x: dT,
@@ -118,35 +131,55 @@ export default class DBHelper {
         }));
     }
 
-    // Insert ISA data
-    insertISA(date, time, rating, summary) {
-        db.transaction(tx => {
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, ?, ?)', [date + '-' + time, rating, summary]);
-        })
-    }
-
     // Get screen time data condensed
-    getScreenTimeCondensed() {
+    getScreenTimeCondensed(date) {
         var productive = [];
         var neutral = [];
         var unproductive = [];
+        let totalScreenTime = 0;
+        let productiveTime = 0;
+        let neutralTime = 0;
+        let unproductiveTime = 0;
 
-        db.transaction(tx => {
-            tx.executeSql('SELECT name, date, interval, time, category from screenTime ORDER BY category', [], (_, { rows }) => {
-                for (var i=0; i < rows._array.length; i++) {
-                    let time = rows._array[i].time;
-                    let interval = rows._array[i].interval.slice(0,5);
-                    let category = rows._array[i].category;
-        
-                    // O(N^2) need more efficient
-                    if (category == 'productive') addTime(time, interval, productive);
-                    else if (category == 'neutral') addTime(time, interval, neutral);
-                    else if (category == 'unproductive') addTime(time, interval, unproductive);
+        return new Promise((resolve, reject) => 
+            db.transaction(tx => {
+                try {
+                    tx.executeSql('SELECT name, date, interval, time, category from screenTime ORDER BY interval, category', [], (_, { rows }) => {
+                        for (var i=0; i < rows._array.length; i++) {
+                            if (rows._array[i].date == date) {
+                                let time = rows._array[i].time;
+                                let interval = rows._array[i].interval.slice(0,5);
+                                let category = rows._array[i].category;
+                                
+                                totalScreenTime += time;
+                    
+                                // O(N^2) need more efficient
+                                if (category == 'productive'){
+                                    productiveTime += time;
+                                    addTime(time / 60, interval, productive);
+                                    addTime(0, interval, neutral);
+                                    addTime(0, interval, unproductive);
+                                } else if (category == 'neutral'){
+                                    neutralTime += time;
+                                    addTime(0, interval, productive);
+                                    addTime(time / 60, interval, neutral);
+                                    addTime(0, interval, unproductive);
+                                } else if (category == 'unproductive') {
+                                    unproductiveTime += time;
+                                    addTime(0, interval, productive);
+                                    addTime(0, interval, neutral);
+                                    addTime(time / 60, interval, unproductive);
+                                } 
+                            }
+                        }
+
+                        resolve([productive, neutral, unproductive, totalScreenTime, productiveTime, neutralTime, unproductiveTime]);
+                    });
+                } catch(error) {
+                    reject(error);
                 }
-            });
-        });
-
-        return([productive, neutral, unproductive]);
+                
+        }));
     }
 
     // Gets sleep data
@@ -185,5 +218,35 @@ export default class DBHelper {
         });
 
         return([hoursInBedData, hoursUntilSleepData, timesWokenUpData, sleepQualityData]);
+    }
+
+    // Insert ISA Data
+    insertISA(date, time, rating, summary) {
+        return new Promise((resolve, reject) =>
+            db.transaction(tx => {
+                try {
+                    tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, ?, ?)', [date + '-' + time, rating, summary]);
+                    resolve(true);
+                } catch(error) {
+                    reject(error);
+                }
+                
+            })
+        )
+        
+    }
+
+    // Insert Screen Time Data
+    insertScreenTime(name, date, interval, time, category) {
+        return new Promise((resolve, reject) =>
+            db.transaction(tx => {
+                try {
+                    tx.executeSql('INSERT into screenTime (name, date, interval, time, category) values (?, ?, ?, ?, ?)', [name, date, interval, time, category]);
+                    resolve(true);
+                } catch(error) {
+                    reject(error);
+                }
+            })
+        )
     }
 }
