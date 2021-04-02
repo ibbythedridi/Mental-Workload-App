@@ -144,7 +144,7 @@ export default class DBHelper {
         return new Promise((resolve, reject) => 
             db.transaction(tx => {
                 try {
-                    tx.executeSql('SELECT name, date, interval, time, category from screenTime ORDER BY category', [], (_, { rows }) => {
+                    tx.executeSql('SELECT name, date, interval, time, category from screenTime ORDER BY interval, category', [], (_, { rows }) => {
                         for (var i=0; i < rows._array.length; i++) {
                             if (rows._array[i].date == date) {
                                 let time = rows._array[i].time;
@@ -156,19 +156,19 @@ export default class DBHelper {
                                 // O(N^2) need more efficient
                                 if (category == 'productive'){
                                     productiveTime += time;
-                                    addTime(time, interval, productive);
+                                    addTime(time / 60, interval, productive);
                                     addTime(0, interval, neutral);
                                     addTime(0, interval, unproductive);
                                 } else if (category == 'neutral'){
                                     neutralTime += time;
                                     addTime(0, interval, productive);
-                                    addTime(time, interval, neutral);
+                                    addTime(time / 60, interval, neutral);
                                     addTime(0, interval, unproductive);
                                 } else if (category == 'unproductive') {
                                     unproductiveTime += time;
                                     addTime(0, interval, productive);
                                     addTime(0, interval, neutral);
-                                    addTime(time, interval, unproductive);
+                                    addTime(time / 60, interval, unproductive);
                                 } 
                             }
                         }

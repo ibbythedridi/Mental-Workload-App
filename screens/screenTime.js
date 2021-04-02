@@ -122,9 +122,9 @@ export default function ScreenTime({ navigation }) {
                             data={legend}
                         />
                         <VictoryStack colorScale={colours} style= {{ data: { stroke: '#000', strokeWidth: 1 }}} >
-                            <VictoryBar data={productive} labels={ ({ datum }) => Math.round(datum.y * 10) / 10} labelComponent={<VictoryLabel dy={30}/>} />
-                            <VictoryBar data={neutral} labels={({ datum }) => Math.round(datum.y * 10) / 10} labelComponent={<VictoryLabel dy={30}/>} />
-                            <VictoryBar data={unproductive} labels={({ datum }) => Math.round(datum.y * 10) / 10} labelComponent={<VictoryLabel dy={30}/>} />
+                            <VictoryBar data={productive} />
+                            <VictoryBar data={neutral} />
+                            <VictoryBar data={unproductive} />
                         </VictoryStack>
                     </VictoryChart>
                     <Text> Total Screen Time: {totalScreenTime} </Text>
