@@ -189,35 +189,41 @@ export default class DBHelper {
         let timesWokenUpData = [];
         let sleepQualityData = [];
 
-        db.transaction(tx => {
-            tx.executeSql('SELECT date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality from sleep', [], (_, { rows }) => {
-                for (var i=0; i < (rows._array.length); i++) {
-                    var date = rows._array[i].date.slice(0, 5);
-        
-                    hoursInBedData.push({
-                        x: date,
-                        y: rows._array[i].timeInBed
-                    });
-        
-                    hoursUntilSleepData.push({
-                        x: date,
-                        y: rows._array[i].timeTilSleep
-                    });
-        
-                    timesWokenUpData.push({
-                        x: date,
-                        y: rows._array[i].timesWokenUp
-                    });
-        
-                    sleepQualityData.push({
-                        x: date,
-                        y: rows._array[i].sleepQuality
-                    });
-                }
-            });
-        });
+        return new Promise((resolve, reject) =>
+            db.transaction(tx => {
+                try{
+                    tx.executeSql('SELECT date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality from sleep', [], (_, { rows }) => {
+                        for (var i=0; i < (rows._array.length); i++) {
+                            var date = rows._array[i].date.slice(0, 5);
+                
+                            hoursInBedData.push({
+                                x: date,
+                                y: rows._array[i].timeInBed
+                            });
+                
+                            hoursUntilSleepData.push({
+                                x: date,
+                                y: rows._array[i].timeTilSleep
+                            });
+                
+                            timesWokenUpData.push({
+                                x: date,
+                                y: rows._array[i].timesWokenUp
+                            });
+                
+                            sleepQualityData.push({
+                                x: date,
+                                y: rows._array[i].sleepQuality
+                            });
+                        }
 
-        return([hoursInBedData, hoursUntilSleepData, timesWokenUpData, sleepQualityData]);
+                        resolve([hoursInBedData, hoursUntilSleepData, timesWokenUpData, sleepQualityData]);
+                    });    
+                } catch(error){
+                    reject(error);
+                }
+            })
+        )
     }
 
     // Insert ISA Data
