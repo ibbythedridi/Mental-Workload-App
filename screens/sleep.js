@@ -37,31 +37,71 @@ export default function Sleep() {
     const [showPicker2, setShowPicker2] = useState(false);
     const [showChart, setShowChart] = useState(false);
 
+    // This function sets the data and shows the chart
+    // Separate function as it'll otherwise just be duplicate code
+    function setData(aDate, bDate, temp) {
+        hoursInBedData = temp ? temp[0] : [],
+        hoursUntilSleepData = temp ? temp[1] : [],
+        timesWokenUpData = temp ? temp[2] : [],
+        sleepQualityData = temp ? temp[3] : [];
+
+        setShowChart(false);
+        if (hoursInBedData.length > 0) setShowChart(true);
+        else {
+            showMessage({
+                message: 'No data for: ' + aDate + ' - ' + bDate,
+                type: 'warning',
+            })
+        }
+    }
+
     const changeFromDate = async (event, selectedDate) => {
         setShowPicker1(Platform.OS === 'ios');
 
         // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
         if (selectedDate) {
             let dateSelect = Moment(selectedDate).format('DD/MM/YYYY');
+            let secondDate = Moment(date2).format('DD/MM/YYYY');
 
-            setDate1(selectedDate);
-
-            tempData = await dbHelper.getSleepData();
-
-            hoursInBedData = tempData ? tempData[0] : [],
-            hoursUntilSleepData = tempData ? tempData[1] : [],
-            timesWokenUpData = tempData ? tempData[2] : [],
-            sleepQualityData = tempData ? tempData[3] : [];
-
-            setShowChart(false);
-            if (hoursInBedData.length > 0) setShowChart(true);
-            else {
+            // If the date selected is after to date, give warning otherwise continue
+            if (Moment(dateSelect, 'DD/MM/YYYY').isAfter(secondDate)) {
                 showMessage({
-                    message: 'No data for: ' + dateSelect,
+                    message: "You can't pick a date later than 'to' date (" + secondDate + ")",
                     type: 'warning',
                 })
+            } else {
+                setDate1(selectedDate);
+
+                // 'to' date is defaulted to the current date, so if it hasn't been picked yet, all the data should be shown
+                tempData = await dbHelper.getSleepData(dateSelect, secondDate);
+
+                setData(dateSelect, secondDate, tempData);
             }
          }
+    }
+
+    const changeToDate = async (event, selectedDate) => {
+        setShowPicker2(Platform.OS === 'ios');
+
+        // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
+        if (selectedDate) {
+            let dateSelect = Moment(selectedDate).format('DD/MM/YYYY');
+            let firstDate = Moment(date1).format('DD/MM/YYYY');
+
+            // If the date selected is after to date, give warning otherwise continue
+            if (Moment(dateSelect, 'DD/MM/YYYY').isBefore(firstDate)) {
+                showMessage({
+                    message: "You can't pick a date earlier than 'from' date (" + firstDate + ")",
+                    type: 'warning',
+                })
+            } else {
+                setDate2(selectedDate);
+
+                tempData = await dbHelper.getSleepData(firstDate, dateSelect);
+
+                setData(firstDate, dateSelect, tempData);
+            }  
+        }
     }
 
     const showFromPicker = () => {
@@ -86,6 +126,16 @@ export default function Sleep() {
                 mode={'date'}
                 display="default"
                 onChange={changeFromDate}
+                />
+            )}
+
+            {showPicker2 && (
+                <DateTimePicker
+                testID="dateTimePicker1"
+                value={date2}
+                mode={'date'}
+                display="default"
+                onChange={changeToDate}
                 />
             )}
 

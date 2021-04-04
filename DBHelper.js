@@ -1,4 +1,5 @@
 import * as SQLite from 'expo-sqlite';
+import Moment from 'moment';
 
 const db = SQLite.openDatabase('db.db');
 
@@ -183,7 +184,7 @@ export default class DBHelper {
     }
 
     // Gets sleep data
-    getSleepData() {
+    getSleepData(fromDate, toDate) {
         let hoursInBedData = [];
         let hoursUntilSleepData = [];
         let timesWokenUpData = [];
@@ -194,27 +195,31 @@ export default class DBHelper {
                 try{
                     tx.executeSql('SELECT date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality from sleep', [], (_, { rows }) => {
                         for (var i=0; i < (rows._array.length); i++) {
-                            var date = rows._array[i].date.slice(0, 5);
+                            let date = Moment(rows._array[i].date, 'DD/MM/YYYY').format('DD/MM/YYYY');
+
+                            if (Moment(date, 'DD/MM/YYYY').isAfter(fromDate) && Moment(date, 'DD/MM/YYYY').isBefore(toDate)) {
+                                date = date.slice(0, 5);
                 
-                            hoursInBedData.push({
-                                x: date,
-                                y: rows._array[i].timeInBed
-                            });
-                
-                            hoursUntilSleepData.push({
-                                x: date,
-                                y: rows._array[i].timeTilSleep
-                            });
-                
-                            timesWokenUpData.push({
-                                x: date,
-                                y: rows._array[i].timesWokenUp
-                            });
-                
-                            sleepQualityData.push({
-                                x: date,
-                                y: rows._array[i].sleepQuality
-                            });
+                                hoursInBedData.push({
+                                    x: date,
+                                    y: rows._array[i].timeInBed
+                                });
+                    
+                                hoursUntilSleepData.push({
+                                    x: date,
+                                    y: rows._array[i].timeTilSleep
+                                });
+                    
+                                timesWokenUpData.push({
+                                    x: date,
+                                    y: rows._array[i].timesWokenUp
+                                });
+                    
+                                sleepQualityData.push({
+                                    x: date,
+                                    y: rows._array[i].sleepQuality
+                                });
+                            }
                         }
 
                         resolve([hoursInBedData, hoursUntilSleepData, timesWokenUpData, sleepQualityData]);
