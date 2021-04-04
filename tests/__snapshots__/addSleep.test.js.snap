@@ -29,13 +29,12 @@ exports[`renders correctly 1`] = `
     value=""
   />
   <Text>
-    Time in Bed
+    Hours in Bed
   </Text>
   <TextInput
     allowFontScaling={true}
     keyboardType="numeric"
     onChangeText={[Function]}
-    placeholder="in hours"
     rejectResponderTermination={true}
     style={
       Object {
@@ -49,7 +48,7 @@ exports[`renders correctly 1`] = `
     value=""
   />
   <Text>
-    Hours in Bed until Sleep
+    Hours until Sleep
   </Text>
   <TextInput
     allowFontScaling={true}

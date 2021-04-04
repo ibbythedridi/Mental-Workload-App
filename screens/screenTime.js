@@ -17,7 +17,7 @@ const dbHelper = new DBHelper();
 const windowWidth = Dimensions.get('window').width;
 
 // Productive, Neutral, Unproductive colours
-var colours=['#00ff00', '#add8e6', '#ff0000']
+var colours=['#00cc00', '#add8e6', '#cc0000']
 
 // Categories
 var productive = [],

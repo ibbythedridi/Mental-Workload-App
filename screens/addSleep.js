@@ -15,15 +15,15 @@ const dbHelper = new DBHelper();
 export default function AddSleep({ navigation }) {
     
     const [date, setDate] = useState('');
-    const [timeInBed, setTimeInBed] = useState('');
-    const [timeTilSleep, setTimeTilSleep] = useState('');
+    const [hoursInBed, setHoursInBed] = useState('');
+    const [hoursTilSleep, setHoursTilSleep] = useState('');
     const [timesWokenUp, setTimesWokenUp] = useState('');
     const [sleepQuality, setSleepQuality] = useState('');
 
     const submit = async () => {
         Keyboard.dismiss();
 
-        let subSleep = await dbHelper.insertSleep(date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality);
+        let subSleep = await dbHelper.insertSleep(date, hoursInBed, hoursTilSleep, timesWokenUp, sleepQuality);
 
         if (subSleep == true) {
             showMessage({
@@ -49,20 +49,19 @@ export default function AddSleep({ navigation }) {
                 placeholder='DD/MM/YYYY'
             />
 
-            <Text>Time in Bed</Text>
+            <Text>Hours in Bed</Text>
             <TextInput
                 style={globalStyles.input}
-                value={timeInBed}
-                onChangeText={timeInBed => setTimeInBed(timeInBed)}
+                value={hoursInBed}
+                onChangeText={hoursInBed => setHoursInBed(hoursInBed)}
                 keyboardType={'numeric'}
-                placeholder='in hours'
             />
 
-            <Text>Hours in Bed until Sleep</Text>
+            <Text>Hours until Sleep</Text>
             <TextInput
                 style={globalStyles.input}
-                value={timeTilSleep}
-                onChangeText={timeTilSleep => setTimeTilSleep(timeTilSleep)}
+                value={hoursTilSleep}
+                onChangeText={hoursTilSleep => setHoursTilSleep(hoursTilSleep)}
                 keyboardType={'numeric'}
                 placeholder='in hours'
             />

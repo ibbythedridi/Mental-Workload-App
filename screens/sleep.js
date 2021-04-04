@@ -2,22 +2,26 @@ import React, {useState} from 'react';
 import {
     View,
     ScrollView,
-    Button
+    Button,
+    Dimensions,
+    Platform
 } from 'react-native';
 import { globalStyles } from '../styles/global';
-import { VictoryChart, VictoryGroup, VictoryLegend, VictoryLine, VictoryScatter, VictoryTheme } from 'victory-native';
+import { VictoryArea, VictoryChart, VictoryGroup, VictoryLegend, VictoryLine, VictoryScatter, VictoryTheme } from 'victory-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import DBHelper from '../DBHelper';
 
+const windowWidth = Dimensions.get('window').width;
+
 const dbHelper = new DBHelper();
 
 var colours = {
-    'hoursInBed': '#000',
-    'hoursUntilSleep': '#0000ff',
-    'timesWokenUp': '#ff0000',
-    'sleepQuality': '#00ff00'
+    'hoursInBed': '#006bc9',
+    'hoursUntilSleep': '#004b8f',
+    'timesWokenUp': '#cc0000',
+    'sleepQuality': '#009900'
 }
 
 var tempData = [];
@@ -29,7 +33,9 @@ var hoursInBedData = [],
 
 export default function Sleep({ navigation }) {
 
-    var graphWidth = hoursInBedData.length*80+70;
+    var graphWidth = hoursInBedData.length*60+70;
+    // If graph width is less than window width, set the graph width to window width
+    graphWidth = graphWidth < windowWidth ? windowWidth : graphWidth;
 
     const [date1, setDate1] = useState(new Date());
     const [date2, setDate2] = useState(new Date());
@@ -56,8 +62,7 @@ export default function Sleep({ navigation }) {
     }
 
     const changeFromDate = async (event, selectedDate) => {
-        setShowPicker1(Platform.OS === 'ios');
-
+        setShowPicker1(!Platform.OS === 'ios');
         // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
         if (selectedDate) {
             let dateSelect = Moment(selectedDate);
@@ -75,14 +80,13 @@ export default function Sleep({ navigation }) {
                 // 'to' date is defaulted to the current date, so if it hasn't been picked yet, all the data should be shown
                 tempData = await dbHelper.getSleepData(dateSelect, secondDate);
 
-                setData(dateSelect, secondDate, tempData);
+                setData(dateSelect.format('DD/MM/YYYY'), secondDate.format('DD/MM/YYYY'), tempData);
             }
          }
     }
 
     const changeToDate = async (event, selectedDate) => {
-        setShowPicker2(Platform.OS === 'ios');
-
+        setShowPicker2(!Platform.OS === 'ios');
         // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
         if (selectedDate) {
             let dateSelect = Moment(selectedDate);
@@ -99,7 +103,7 @@ export default function Sleep({ navigation }) {
 
                 tempData = await dbHelper.getSleepData(firstDate, dateSelect);
 
-                setData(firstDate, dateSelect, tempData);
+                setData(firstDate.format('DD/MM/YYYY'), dateSelect.format('DD/MM/YYYY'), tempData);
             }  
         }
     }
@@ -114,76 +118,90 @@ export default function Sleep({ navigation }) {
 
     return (
         <View style={globalStyles.container}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }} >
-                <Button title="'From' date" onPress={showFromPicker} />
-                <Button title="'To' date" onPress={showToPicker} />
-            </View>
-
-            {showPicker1 && (
-                <DateTimePicker
-                testID="dateTimePicker1"
-                value={date1}
-                mode={'date'}
-                display="default"
-                onChange={changeFromDate}
-                />
-            )}
-
-            {showPicker2 && (
-                <DateTimePicker
-                testID="dateTimePicker1"
-                value={date2}
-                mode={'date'}
-                display="default"
-                onChange={changeToDate}
-                />
-            )}
-
-            {showChart && (
-                <View>
-                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
-                        <VictoryChart theme={VictoryTheme.material} height={400} width={graphWidth} domain={{ y: [0, 12] }}>
-                            <VictoryLegend
-                                title='Legend'
-                                centerTitle
-                                orientation='horizontal'
-                                data={[
-                                    { name: 'Hours in Bed', symbol: { fill: colours['hoursInBed']} },
-                                    { name: 'Hours Until Sleep', symbol: { fill: colours['hoursUntilSleep']} },
-                                    { name: 'Times Woken Up', symbol: { fill: colours['timesWokenUp']} },
-                                    { name: 'Sleep Quality Rating', symbol: { fill: colours['sleepQuality']} },
-                                ]}
-                            />
-
-                            {/* Hours in Bed */}
-                            <VictoryGroup data={hoursInBedData}>
-                                <VictoryLine style={{ data: { stroke: colours['hoursInBed'] }, parent: { border: '1px solid #ccc'} }} />
-                                <VictoryScatter style = {{ data: { fill: colours['hoursInBed'] }}} />
-                            </VictoryGroup>
-
-                            {/* Hours until Sleep */}
-                            <VictoryGroup data={hoursUntilSleepData}>    
-                                <VictoryLine style={{ data: { stroke: colours['hoursUntilSleep'] }, parent: { border: '1px solid #ccc'} }} />
-                                <VictoryScatter style = {{ data: { fill: colours['hoursUntilSleep'] }}} />
-                            </VictoryGroup>
-
-                            {/* Times Woken UP */}
-                            <VictoryGroup data={timesWokenUpData}>
-                                <VictoryLine style={{ data: { stroke: colours['timesWokenUp'] }, parent: { border: '1px solid #ccc'} }} />
-                                <VictoryScatter style = {{ data: { fill: colours['timesWokenUp'] }}} />
-                            </VictoryGroup>
-
-                            {/* Sleep Quality */}
-                            <VictoryGroup data={sleepQualityData}>    
-                                <VictoryLine style={{ data: { stroke: colours['sleepQuality'] }, parent: { border: '1px solid #ccc'} }} />
-                                <VictoryScatter style = {{ data: { fill: colours['sleepQuality'] }}} />
-                            </VictoryGroup>
-                        </VictoryChart>
-                    </ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false} >
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }} >
+                    <Button title="'From' date" onPress={showFromPicker} />
+                    <Button title="'To' date" onPress={showToPicker} />
                 </View>
-            )}
-            <Button title='Add Data' onPress={() => navigation.navigate('AddSleep')} />
-            <FlashMessage position='bottom' />
+
+                {showPicker1 && (
+                    <DateTimePicker
+                    testID="dateTimePicker1"
+                    value={date1}
+                    mode={'date'}
+                    display="default"
+                    onChange={changeFromDate}
+                    />
+                )}
+
+                {showPicker2 && (
+                    <DateTimePicker
+                    testID="dateTimePicker1"
+                    value={date2}
+                    mode={'date'}
+                    display="default"
+                    onChange={changeToDate}
+                    />
+                )}
+
+                {showChart && (
+                    <View>
+                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
+                            <VictoryChart theme={VictoryTheme.material} width={graphWidth} >
+                                <VictoryLegend
+                                    x = {windowWidth / 2 - 100}
+                                    title='Legend'
+                                    centerTitle
+                                    orientation='horizontal'
+                                    data={[
+                                        { name: 'Hours in Bed', symbol: { fill: colours['hoursInBed']} },
+                                        { name: 'Hours Until Sleep', symbol: { fill: colours['hoursUntilSleep']} }
+                                    ]}
+                                />
+
+                                {/* Hours in Bed */}
+                                <VictoryArea
+                                    style={{ data: { fill: colours['hoursInBed'] } }}
+                                    data={hoursInBedData}
+                                />
+
+                                {/* Hours until Sleep */}
+                                <VictoryArea
+                                    style={{ data: { fill: colours['hoursUntilSleep'] } }}
+                                    data={hoursUntilSleepData}
+                                />
+                            </VictoryChart>
+                        </ScrollView>
+                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
+                            <VictoryChart theme={VictoryTheme.material} width={graphWidth} >
+                                <VictoryLegend
+                                    x = {windowWidth / 2 - 110}
+                                    title='Legend'
+                                    centerTitle
+                                    orientation='horizontal'
+                                    data={[
+                                        { name: 'Times Woken Up', symbol: { fill: colours['timesWokenUp']} },
+                                        { name: 'Sleep Quality Rating', symbol: { fill: colours['sleepQuality']} }
+                                    ]}
+                                />
+                                {/* Times Woken UP */}
+                                <VictoryGroup data={timesWokenUpData}>
+                                    <VictoryLine style={{ data: { stroke: colours['timesWokenUp'] }, parent: { border: '1px solid #ccc'} }} />
+                                    <VictoryScatter style = {{ data: { fill: colours['timesWokenUp'] }}} />
+                                </VictoryGroup>
+
+                                {/* Sleep Quality */}
+                                <VictoryGroup data={sleepQualityData}>    
+                                    <VictoryLine style={{ data: { stroke: colours['sleepQuality'] }, parent: { border: '1px solid #ccc'} }} />
+                                    <VictoryScatter style = {{ data: { fill: colours['sleepQuality'] }}} />
+                                </VictoryGroup>
+                            </VictoryChart>
+                        </ScrollView>
+                    </View>
+                )}
+                <Button title='Add Data' onPress={() => navigation.navigate('AddSleep')} />
+                <FlashMessage position='bottom' />
+            </ScrollView>
         </View>
     )
 }

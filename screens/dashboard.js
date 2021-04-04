@@ -4,14 +4,12 @@ import {
     Text,
     Button
 } from 'react-native';
-import FlashMessage from 'react-native-flash-message';
 import { globalStyles } from '../styles/global';
 
 export default function Dashboard({ navigation }) {
 
     return (
         <View style={globalStyles.container}>
-            <Text>Dashboard</Text>
             <Button title='ISA' onPress={() => navigation.navigate('ISA')} />
             <View style={{ height: 20 }} />
             <Button title='Screen Time' onPress={() => navigation.navigate('ScreenTime')} />

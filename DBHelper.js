@@ -38,12 +38,12 @@ export default class DBHelper {
             );
             /*
             date = date of night slept
-            timeInBed = time spent in bed (in hours)
-            timeTilSleep = time taken from getting into bed to being asleep (in hours)
+            hoursInBed = time spent in bed (in hours)
+            hoursUntilSleep = time taken from getting into bed to being asleep (in hours)
             timesWokenUp = # of times woken up throughout the night
             sleepQuality = subjective sleep quality rating
             */
-            tx.executeSql('CREATE TABLE IF NOT EXISTS sleep (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, timeInBed REAL NOT NULL, timeTilSleep REAL NOT NULL, timesWokenUp INTEGER NOT NULL, sleepQuality INTEGER NOT NULL)'
+            tx.executeSql('CREATE TABLE IF NOT EXISTS sleep (_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, hoursInBed REAL NOT NULL, hoursUntilSleep REAL NOT NULL, timesWokenUp INTEGER NOT NULL, sleepQuality INTEGER NOT NULL)'
             );
             /*
             name = name of program
@@ -66,12 +66,22 @@ export default class DBHelper {
             tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', ['01/04/2021-20:12:13', 'this is the summary 12']);
             tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 3, ?)', ['01/04/2021-21:12:13', 'this is the summary 13']);
             tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['01/04/2021-22:12:13', 'this is the summary 14']);
+
+            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 5, ?)', ['01/04/2021-17:12:13', 'this is the summary 15']);
+            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['01/04/2021-18:12:13', 'this is the summary 16']);
+            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['01/04/2021-19:12:13', 'this is the summary 17']);
+            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['01/04/2021-20:12:13', 'this is the summary 18']);
+            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 4, ?)', ['01/04/2021-21:12:13', 'this is the summary 19']);
+            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', ['01/04/2021-22:12:13', 'this is the summary 20']);
       
-            tx.executeSql('INSERT INTO sleep (date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality) values (?, 8.5, 0.5, 0, 3)', ['01/04/2021']);
-            tx.executeSql('INSERT INTO sleep (date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality) values (?, 9, 0, 0, 5)', ['02/04/2021']);
-            tx.executeSql('INSERT INTO sleep (date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality) values (?, 8, 1, 1, 2)', ['03/04/2021']);
-            tx.executeSql('INSERT INTO sleep (date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality) values (?, 8.5, 0, 0, 3)', ['04/04/2021']);
-            tx.executeSql('INSERT INTO sleep (date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality) values (?, 9.5, 0.5, 2, 5)', ['05/04/2021']);
+            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 8.5, 0.5, 0, 3)', ['01/04/2021']);
+            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 9, 0, 0, 5)', ['02/04/2021']);
+            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 8, 1, 1, 2)', ['03/04/2021']);
+            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 8.5, 0, 0, 3)', ['04/04/2021']);
+            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 9.5, 0.5, 2, 5)', ['05/04/2021']);
+            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 7, 0.5, 0, 1)', ['06/04/2021']);
+            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 9, 0, 0, 5)', ['07/04/2021']);
+            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 8.5, 1.5, 1, 3)', ['08/04/2021']);
       
             tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 120, ?)', ['Microsoft Word', '01/04/2021', '11:00:00-11:30:00', 'productive']);
             tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 25, ?)', ['Adobe Reader', '01/04/2021', '11:00:00-11:30:00', 'productive']);
@@ -94,7 +104,7 @@ export default class DBHelper {
             tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 111, ?)', ['Photos', '01/04/2021', '12:30:00-13:00:00', 'neutral']);
             tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 20, ?)', ['youtube.com', '01/04/2021', '12:30:00-13:00:00', 'unproductive']);
 
-            console.log("done");
+            console.log("Example Data Inserted!");
         });
     }
 
@@ -194,7 +204,7 @@ export default class DBHelper {
         return new Promise((resolve, reject) =>
             db.transaction(tx => {
                 try{
-                    tx.executeSql('SELECT date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality from sleep', [], (_, { rows }) => {
+                    tx.executeSql('SELECT date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality from sleep ORDER BY date', [], (_, { rows }) => {
                         for (var i=0; i < (rows._array.length); i++) {
                             let date = Moment(rows._array[i].date, 'DD/MM/YYYY');
                             //console.log('From: ' + fromDate + ', To: ' + toDate + ', : ' + date);
@@ -204,12 +214,12 @@ export default class DBHelper {
                 
                                 hoursInBedData.push({
                                     x: date,
-                                    y: rows._array[i].timeInBed
+                                    y: rows._array[i].hoursInBed
                                 });
                     
                                 hoursUntilSleepData.push({
                                     x: date,
-                                    y: rows._array[i].timeTilSleep
+                                    y: rows._array[i].hoursUntilSleep
                                 });
                     
                                 timesWokenUpData.push({
@@ -264,11 +274,11 @@ export default class DBHelper {
     }
 
     // Insert Sleep Data
-    insertSleep(date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality) {
+    insertSleep(date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) {
         return new Promise((resolve, reject) => 
             db.transaction(tx => {
                 try {
-                    tx.executeSql('INSERT into sleep (date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality) values (?, ?, ?, ?, ?)', [date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality]);
+                    tx.executeSql('INSERT into sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, ?, ?, ?, ?)', [date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality]);
                     resolve(true);
                 } catch(error) {
                     reject(error);
