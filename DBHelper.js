@@ -38,6 +38,7 @@ export default class DBHelper {
             );
             /*
             date = date of night slept
+            timeInBed = time spent in bed (in hours)
             timeTilSleep = time taken from getting into bed to being asleep (in hours)
             timesWokenUp = # of times woken up throughout the night
             sleepQuality = subjective sleep quality rating
@@ -195,10 +196,11 @@ export default class DBHelper {
                 try{
                     tx.executeSql('SELECT date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality from sleep', [], (_, { rows }) => {
                         for (var i=0; i < (rows._array.length); i++) {
-                            let date = Moment(rows._array[i].date, 'DD/MM/YYYY').format('DD/MM/YYYY');
-
-                            if (Moment(date, 'DD/MM/YYYY').isAfter(fromDate) && Moment(date, 'DD/MM/YYYY').isBefore(toDate)) {
-                                date = date.slice(0, 5);
+                            let date = Moment(rows._array[i].date, 'DD/MM/YYYY');
+                            //console.log('From: ' + fromDate + ', To: ' + toDate + ', : ' + date);
+                            if (date.isAfter(fromDate) && date.isBefore(toDate)) {
+                                //console.log('^ is between');
+                                date = date.format('DD/MM/YYYY').slice(0, 5);
                 
                                 hoursInBedData.push({
                                     x: date,
@@ -253,6 +255,20 @@ export default class DBHelper {
             db.transaction(tx => {
                 try {
                     tx.executeSql('INSERT into screenTime (name, date, interval, time, category) values (?, ?, ?, ?, ?)', [name, date, interval, time, category]);
+                    resolve(true);
+                } catch(error) {
+                    reject(error);
+                }
+            })
+        )
+    }
+
+    // Insert Sleep Data
+    insertSleep(date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality) {
+        return new Promise((resolve, reject) => 
+            db.transaction(tx => {
+                try {
+                    tx.executeSql('INSERT into sleep (date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality) values (?, ?, ?, ?, ?)', [date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality]);
                     resolve(true);
                 } catch(error) {
                     reject(error);

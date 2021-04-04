@@ -27,7 +27,7 @@ var hoursInBedData = [],
     timesWokenUpData = [],
     sleepQualityData = [];
 
-export default function Sleep() {
+export default function Sleep({ navigation }) {
 
     var graphWidth = hoursInBedData.length*80+70;
 
@@ -60,13 +60,13 @@ export default function Sleep() {
 
         // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
         if (selectedDate) {
-            let dateSelect = Moment(selectedDate).format('DD/MM/YYYY');
-            let secondDate = Moment(date2).format('DD/MM/YYYY');
+            let dateSelect = Moment(selectedDate);
+            let secondDate = Moment(date2);
 
             // If the date selected is after to date, give warning otherwise continue
-            if (Moment(dateSelect, 'DD/MM/YYYY').isAfter(secondDate)) {
+            if (dateSelect.isAfter(secondDate)) {
                 showMessage({
-                    message: "You can't pick a date later than 'to' date (" + secondDate + ")",
+                    message: "You can't pick a date later than 'to' date (" + secondDate.format('DD/MM/YYYY') + ")",
                     type: 'warning',
                 })
             } else {
@@ -85,13 +85,13 @@ export default function Sleep() {
 
         // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
         if (selectedDate) {
-            let dateSelect = Moment(selectedDate).format('DD/MM/YYYY');
-            let firstDate = Moment(date1).format('DD/MM/YYYY');
+            let dateSelect = Moment(selectedDate);
+            let firstDate = Moment(date1);
 
             // If the date selected is after to date, give warning otherwise continue
-            if (Moment(dateSelect, 'DD/MM/YYYY').isBefore(firstDate)) {
+            if (dateSelect.isBefore(firstDate)) {
                 showMessage({
-                    message: "You can't pick a date earlier than 'from' date (" + firstDate + ")",
+                    message: "You can't pick a date earlier than 'from' date (" + firstDate.format('DD/MM/YYYY') + ")",
                     type: 'warning',
                 })
             } else {
@@ -182,7 +182,7 @@ export default function Sleep() {
                     </ScrollView>
                 </View>
             )}
-            
+            <Button title='Add Data' onPress={() => navigation.navigate('AddSleep')} />
             <FlashMessage position='bottom' />
         </View>
     )

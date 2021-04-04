@@ -60,6 +60,7 @@ export default function AddISA({ navigation }) {
                 style={globalStyles.input}
                 value={rating}
                 onChangeText={rating => setRating(rating)}
+                keyboardType={'number-pad'}
                 placeholder="0-5"
             />
 

@@ -29,12 +29,13 @@ exports[`renders correctly 1`] = `
     value=""
   />
   <Text>
-    Time
+    Time in Bed
   </Text>
   <TextInput
     allowFontScaling={true}
+    keyboardType="numeric"
     onChangeText={[Function]}
-    placeholder="hh:mm:ss"
+    placeholder="in hours"
     rejectResponderTermination={true}
     style={
       Object {
@@ -48,32 +49,52 @@ exports[`renders correctly 1`] = `
     value=""
   />
   <Text>
-    Workload Rating
+    Hours in Bed until Sleep
+  </Text>
+  <TextInput
+    allowFontScaling={true}
+    keyboardType="numeric"
+    onChangeText={[Function]}
+    placeholder="in hours"
+    rejectResponderTermination={true}
+    style={
+      Object {
+        "borderWidth": 1,
+        "height": 40,
+        "marginBottom": 10,
+        "padding": 5,
+      }
+    }
+    underlineColorAndroid="transparent"
+    value=""
+  />
+  <Text>
+    Number of Times Woken up Through the Night
+  </Text>
+  <TextInput
+    allowFontScaling={true}
+    keyboardType="number-pad"
+    onChangeText={[Function]}
+    rejectResponderTermination={true}
+    style={
+      Object {
+        "borderWidth": 1,
+        "height": 40,
+        "marginBottom": 10,
+        "padding": 5,
+      }
+    }
+    underlineColorAndroid="transparent"
+    value=""
+  />
+  <Text>
+    Sleep Quality Rating
   </Text>
   <TextInput
     allowFontScaling={true}
     keyboardType="number-pad"
     onChangeText={[Function]}
     placeholder="0-5"
-    rejectResponderTermination={true}
-    style={
-      Object {
-        "borderWidth": 1,
-        "height": 40,
-        "marginBottom": 10,
-        "padding": 5,
-      }
-    }
-    underlineColorAndroid="transparent"
-    value=""
-  />
-  <Text>
-    Summary
-  </Text>
-  <TextInput
-    allowFontScaling={true}
-    onChangeText={[Function]}
-    placeholder="Summary of task"
     rejectResponderTermination={true}
     style={
       Object {
