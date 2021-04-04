@@ -27,7 +27,7 @@ export default function AddScreenTime({ navigation }) {
         Keyboard.dismiss();
 
          // Validating data is in correct format
-         if (Moment(date, 'DD/MM/YYYY').isValid()) {
+         if (Moment(date, 'DD/MM/YYYY').isValid() && date.length == 10) {
             if (Moment(interval, 'hh:mm:ss-hh:mm:ss').isValid() && interval.length == 17) {
                 let subScreenTime = await dbHelper.insertScreenTime(pName, date, interval, time, category);
 

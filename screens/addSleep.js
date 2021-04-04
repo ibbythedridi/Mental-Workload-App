@@ -9,6 +9,7 @@ import {
 import DBHelper from '../DBHelper';
 import { showMessage } from 'react-native-flash-message';
 import { globalStyles } from '../styles/global';
+import Moment from 'moment';
 
 const dbHelper = new DBHelper();
 
@@ -23,19 +24,42 @@ export default function AddSleep({ navigation }) {
     const submit = async () => {
         Keyboard.dismiss();
 
-        let subSleep = await dbHelper.insertSleep(date, hoursInBed, hoursTilSleep, timesWokenUp, sleepQuality);
+        // Validating data is in correct format
+        if (Moment(date, 'DD/MM/YYYY').isValid() && date.length == 10) {
+            if (hoursTilSleep < hoursInBed) {
+                if (sleepQuality >= 0 && sleepQuality <= 5) {
+                    let subSleep = await dbHelper.insertSleep(date, hoursInBed, hoursTilSleep, timesWokenUp, sleepQuality);
 
-        if (subSleep == true) {
-            showMessage({
-                message: 'Successfully submitted data',
-                type: 'success',
-            });
+                    if (subSleep == true) {
+                        showMessage({
+                            message: 'Successfully submitted data',
+                            type: 'success',
+                        });
+                    } else {
+                        showMessage({
+                            message: 'Something went wrong',
+                            type: 'danger',
+                        });
+                    }
+                } else {
+                    showMessage({
+                        message: 'Invalid rating: should be an integer between 0-5 (inclusive)',
+                        type: 'danger'
+                    })
+                }
+            } else {
+                showMessage({
+                    message: 'Invalid hours until sleep: must be lower than hours in bed',
+                    type: 'danger'
+                })
+            }
         } else {
             showMessage({
-                message: 'Something went wrong',
-                type: 'danger',
-            });
+                message: 'Invalid date: should be in format DD/MM/YYYY',
+                type: 'danger'
+            })
         }
+
         navigation.goBack();
     }
 

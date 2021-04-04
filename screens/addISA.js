@@ -24,7 +24,7 @@ export default function AddISA({ navigation }) {
         Keyboard.dismiss();
 
         // Validating data is in correct format
-        if (Moment(date, 'DD/MM/YYYY').isValid()) {
+        if (Moment(date, 'DD/MM/YYYY').isValid() && date.length == 10) {
             if (Moment(time, 'hh:mm:ss').isValid()) {
                 if (rating >= 1 && rating <= 5) {
                     let subISA = await dbHelper.insertISA(date, time, rating, summary);
