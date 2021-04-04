@@ -71,6 +71,7 @@ exports[`renders correctly 1`] = `
   </Text>
   <TextInput
     allowFontScaling={true}
+    keyboardType="number-pad"
     onChangeText={[Function]}
     placeholder="seconds"
     rejectResponderTermination={true}
