@@ -16,6 +16,8 @@ export default function Dashboard({ navigation }) {
             <View style={{ height: 20 }} />
             <Button title='Sleep' onPress={() => navigation.navigate('Sleep')} />
             <View style={{ height: 20 }} />
+            <Button title='Add Data' onPress={() => navigation.navigate('AddData')} />
+            <View style={{ height: 20 }} />
             <Button title='Settings' onPress={() => navigation.navigate('Settings')} />
         </View>
     )

@@ -11,6 +11,7 @@ import { globalStyles } from '../styles/global';
 import DBHelper from '../DBHelper';
 import { showMessage } from 'react-native-flash-message';
 import { Picker } from '@react-native-picker/picker';
+import Moment from 'moment';
 
 const dbHelper = new DBHelper();
 
@@ -25,19 +26,35 @@ export default function AddScreenTime({ navigation }) {
     const submit = async () => {
         Keyboard.dismiss();
 
-        let subScreenTime = await dbHelper.insertScreenTime(pName, date, interval, time, category);
+         // Validating data is in correct format
+         if (Moment(date, 'DD/MM/YYYY').isValid() && date.length == 10) {
+            if (Moment(interval, 'hh:mm:ss-hh:mm:ss').isValid() && interval.length == 17) {
+                let subScreenTime = await dbHelper.insertScreenTime(pName, date, interval, time, category);
 
-        if (subScreenTime == true) {
+                if (subScreenTime == true) {
+                    showMessage({
+                        message: 'Successfully submitted data',
+                        type: 'success',
+                    });
+                } else {
+                    showMessage({
+                        message: 'Something went wrong',
+                        type: 'danger',
+                    });
+                }
+            } else {
+                showMessage({
+                    message: 'Invalid interval: should be in format hh:mm:ss-hh:mm:ss',
+                    type: 'danger'
+                })
+            }
+            
+         } else {
             showMessage({
-                message: 'Successfully submitted data',
-                type: 'success',
-            });
-        } else {
-            showMessage({
-                message: 'Something went wrong',
-                type: 'danger',
-            });
-        }
+                message: 'Invalid date: should be in format DD/MM/YYYY',
+                type: 'danger'
+            })
+         }
         navigation.goBack();
     }
     
@@ -72,6 +89,7 @@ export default function AddScreenTime({ navigation }) {
                 style={globalStyles.input}
                 value={time}
                 onChangeText={time => setTime(time)}
+                keyboardType={'number-pad'}
                 placeholder="seconds"
             />
 
@@ -88,7 +106,7 @@ export default function AddScreenTime({ navigation }) {
                         height:40
                     }}
                     selectedValue={category}
-                    onValueChange={(category) => setCategory(category)}
+                    onValueChange={(category) => setCategory(category.toLowerCase())}
                 >
                     <Picker.Item label='Productive' value='productive' />
                     <Picker.Item label='Neutral' value='neutral' />

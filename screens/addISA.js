@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { globalStyles } from '../styles/global';
 import DBHelper from '../DBHelper';
+import Moment from 'moment';
 import { showMessage } from 'react-native-flash-message';
 
 const dbHelper = new DBHelper();
@@ -21,18 +22,42 @@ export default function AddISA({ navigation }) {
 
     const submit = async () => {
         Keyboard.dismiss();
-        let subISA = await dbHelper.insertISA(date, time, rating, summary);
 
-        if (subISA == true) {
-            showMessage({
-                message: 'Successfully submitted data',
-                type: 'success',
-            });
+        // Validating data is in correct format
+        if (Moment(date, 'DD/MM/YYYY').isValid() && date.length == 10) {
+            if (Moment(time, 'hh:mm:ss').isValid()) {
+                if (rating >= 1 && rating <= 5) {
+                    let subISA = await dbHelper.insertISA(date, time, rating, summary);
+
+                    if (subISA == true) {
+                        showMessage({
+                            message: 'Successfully submitted data',
+                            type: 'success',
+                        });
+                    } else {
+                        showMessage({
+                            message: 'Something went wrong, try again',
+                            type: 'danger',
+                        });
+                    }
+                } else {
+                    showMessage({
+                        message: 'Invalid rating: should be an integer between 1-5 (inclusive)',
+                        type: 'danger'
+                    })
+                }
+            }
+            else {
+                showMessage({
+                    message: 'Invalid time: should be in format hh:mm:ss',
+                    type: 'danger'
+                })
+            }
         } else {
             showMessage({
-                message: 'Something went wrong',
-                type: 'danger',
-            });
+                message: 'Invalid date: should be in format DD/MM/YYYY',
+                type: 'danger'
+            })
         }
         navigation.goBack();
     }

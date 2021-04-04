@@ -5,6 +5,7 @@ import ISA from '../screens/isa';
 import ScreenTime from '../screens/screenTime';
 import Sleep from '../screens/sleep';
 import Settings from '../screens/settings';
+import AddData from '../screens/addData';
 import AddISA from '../screens/addISA';
 import AddScreenTime from '../screens/addScreenTime';
 import AddSleep from '../screens/addSleep';
@@ -24,6 +25,9 @@ const HomeStack = createStackNavigator({
     },
     Settings: {
         screen: Settings
+    },
+    AddData: {
+        screen: AddData
     },
     AddISA: {
         screen: AddISA
