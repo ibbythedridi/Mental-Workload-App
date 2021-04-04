@@ -6,7 +6,8 @@ import ScreenTime from '../screens/screenTime';
 import Sleep from '../screens/sleep';
 import Settings from '../screens/settings';
 import AddISA from '../screens/addISA';
-import AddScreenTime from '../screens/addScreenTime.js';
+import AddScreenTime from '../screens/addScreenTime';
+import AddSleep from '../screens/addSleep';
 
 const HomeStack = createStackNavigator({
     Dashboard: {
@@ -29,6 +30,9 @@ const HomeStack = createStackNavigator({
     },
     AddScreenTime: {
         screen: AddScreenTime
+    },
+    AddSleep: {
+        screen: AddSleep
     }
 });
 

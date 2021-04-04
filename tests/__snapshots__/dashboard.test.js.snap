@@ -9,9 +9,6 @@ exports[`renders dashboard correctly 1`] = `
     }
   }
 >
-  <Text>
-    Dashboard
-  </Text>
   <View
     accessibilityRole="button"
     accessibilityState={Object {}}
