@@ -1,6 +1,6 @@
 import React from 'react';
 import Navigator from './routes/homeStack';
-import DBHelper from './DBHelper';
+import DBHelper from './components/dbHelper';
 
 const dbHelper = new DBHelper();
 

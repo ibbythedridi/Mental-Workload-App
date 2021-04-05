@@ -2,14 +2,14 @@ import React from 'react';
 import {
     View,
     Text,
-    Button,
     TextInput,
     Keyboard
 } from 'react-native';
 import { globalStyles } from '../styles/global';
-import DBHelper from '../DBHelper';
+import DBHelper from '../components/dbHelper';
 import Moment from 'moment';
 import { showMessage } from 'react-native-flash-message';
+import DButton from '../components/button';
 
 const dbHelper = new DBHelper();
 
@@ -64,40 +64,36 @@ export default function AddISA({ navigation }) {
 
     return (
         <View style={globalStyles.container}>
-            <Text>Date</Text>
             <TextInput
                 style={globalStyles.input}
                 value={date}
                 onChangeText={date => setDate(date)}
-                placeholder="DD/MM/YYYY"
+                placeholder="Date: DD/MM/YYYY"
             />
 
-            <Text>Time</Text>
             <TextInput
                 style={globalStyles.input}
                 value={time}
                 onChangeText={time => setTime(time)}
-                placeholder="hh:mm:ss"
+                placeholder="Time: hh:mm:ss"
             />
 
-            <Text>Workload Rating</Text>
             <TextInput
                 style={globalStyles.input}
                 value={rating}
                 onChangeText={rating => setRating(rating)}
                 keyboardType={'number-pad'}
-                placeholder="0-5"
+                placeholder="Workload Rating: 0-5"
             />
 
-            <Text>Summary</Text>
             <TextInput
                 style={globalStyles.input}
                 value={summary}
                 onChangeText={summary => setSummary(summary)}
-                placeholder="Summary of task"
+                placeholder="Summary"
             />
 
-            <Button title='Submit' onPress={submit} />
+            <DButton text='Submit' onPress={submit} />              
         </View>
     )
 }

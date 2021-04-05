@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
     View,
     ScrollView,
-    Button,
     Dimensions,
     Platform
 } from 'react-native';
@@ -11,7 +10,8 @@ import { VictoryArea, VictoryChart, VictoryGroup, VictoryLegend, VictoryLine, Vi
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
 import FlashMessage, { showMessage } from "react-native-flash-message";
-import DBHelper from '../DBHelper';
+import DBHelper from '../components/dbHelper';
+import DButton from '../components/button';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -120,8 +120,8 @@ export default function Sleep({ navigation }) {
         <View style={globalStyles.container}>
             <ScrollView showsVerticalScrollIndicator={false} >
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }} >
-                    <Button title="'From' date" onPress={showFromPicker} />
-                    <Button title="'To' date" onPress={showToPicker} />
+                    <DButton text="'From' date" onPress={showFromPicker} />
+                    <DButton text="'To' date" onPress={showToPicker} />
                 </View>
 
                 {showPicker1 && (
@@ -146,60 +146,64 @@ export default function Sleep({ navigation }) {
 
                 {showChart && (
                     <View>
-                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
-                            <VictoryChart theme={VictoryTheme.material} width={graphWidth} >
-                                <VictoryLegend
-                                    x = {windowWidth / 2 - 100}
-                                    title='Legend'
-                                    centerTitle
-                                    orientation='horizontal'
-                                    data={[
-                                        { name: 'Hours in Bed', symbol: { fill: colours['hoursInBed']} },
-                                        { name: 'Hours Until Sleep', symbol: { fill: colours['hoursUntilSleep']} }
-                                    ]}
-                                />
+                        <View style={globalStyles.card} >
+                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
+                                <VictoryChart theme={VictoryTheme.material} width={graphWidth} >
+                                    <VictoryLegend
+                                        x = {windowWidth / 2 - 100}
+                                        title='Legend'
+                                        centerTitle
+                                        orientation='horizontal'
+                                        data={[
+                                            { name: 'Hours in Bed', symbol: { fill: colours['hoursInBed']} },
+                                            { name: 'Hours Until Sleep', symbol: { fill: colours['hoursUntilSleep']} }
+                                        ]}
+                                    />
 
-                                {/* Hours in Bed */}
-                                <VictoryArea
-                                    style={{ data: { fill: colours['hoursInBed'] } }}
-                                    data={hoursInBedData}
-                                />
+                                    {/* Hours in Bed */}
+                                    <VictoryArea
+                                        style={{ data: { fill: colours['hoursInBed'] } }}
+                                        data={hoursInBedData}
+                                    />
 
-                                {/* Hours until Sleep */}
-                                <VictoryArea
-                                    style={{ data: { fill: colours['hoursUntilSleep'] } }}
-                                    data={hoursUntilSleepData}
-                                />
-                            </VictoryChart>
-                        </ScrollView>
-                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
-                            <VictoryChart theme={VictoryTheme.material} width={graphWidth} >
-                                <VictoryLegend
-                                    x = {windowWidth / 2 - 110}
-                                    title='Legend'
-                                    centerTitle
-                                    orientation='horizontal'
-                                    data={[
-                                        { name: 'Times Woken Up', symbol: { fill: colours['timesWokenUp']} },
-                                        { name: 'Sleep Quality Rating', symbol: { fill: colours['sleepQuality']} }
-                                    ]}
-                                />
-                                {/* Times Woken UP */}
-                                <VictoryGroup data={timesWokenUpData}>
-                                    <VictoryLine style={{ data: { stroke: colours['timesWokenUp'] }, parent: { border: '1px solid #ccc'} }} />
-                                    <VictoryScatter style = {{ data: { fill: colours['timesWokenUp'] }}} />
-                                </VictoryGroup>
+                                    {/* Hours until Sleep */}
+                                    <VictoryArea
+                                        style={{ data: { fill: colours['hoursUntilSleep'] } }}
+                                        data={hoursUntilSleepData}
+                                    />
+                                </VictoryChart>
+                            </ScrollView>
+                        </View>
+                        <View style={globalStyles.card} >
+                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
+                                <VictoryChart theme={VictoryTheme.material} width={graphWidth} >
+                                    <VictoryLegend
+                                        x = {windowWidth / 2 - 110}
+                                        title='Legend'
+                                        centerTitle
+                                        orientation='horizontal'
+                                        data={[
+                                            { name: 'Times Woken Up', symbol: { fill: colours['timesWokenUp']} },
+                                            { name: 'Sleep Quality Rating', symbol: { fill: colours['sleepQuality']} }
+                                        ]}
+                                    />
+                                    {/* Times Woken UP */}
+                                    <VictoryGroup data={timesWokenUpData}>
+                                        <VictoryLine style={{ data: { stroke: colours['timesWokenUp'] }, parent: { border: '1px solid #ccc'} }} />
+                                        <VictoryScatter style = {{ data: { fill: colours['timesWokenUp'] }}} />
+                                    </VictoryGroup>
 
-                                {/* Sleep Quality */}
-                                <VictoryGroup data={sleepQualityData}>    
-                                    <VictoryLine style={{ data: { stroke: colours['sleepQuality'] }, parent: { border: '1px solid #ccc'} }} />
-                                    <VictoryScatter style = {{ data: { fill: colours['sleepQuality'] }}} />
-                                </VictoryGroup>
-                            </VictoryChart>
-                        </ScrollView>
+                                    {/* Sleep Quality */}
+                                    <VictoryGroup data={sleepQualityData}>    
+                                        <VictoryLine style={{ data: { stroke: colours['sleepQuality'] }, parent: { border: '1px solid #ccc'} }} />
+                                        <VictoryScatter style = {{ data: { fill: colours['sleepQuality'] }}} />
+                                    </VictoryGroup>
+                                </VictoryChart>
+                            </ScrollView>
+                        </View>
                     </View>
                 )}
-                <Button title='Add Data' onPress={() => navigation.navigate('AddSleep')} />
+                <DButton text='Add Data' onPress={() => navigation.navigate('AddSleep')} />
                 <FlashMessage position='bottom' />
             </ScrollView>
         </View>

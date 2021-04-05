@@ -67,12 +67,12 @@ export default class DBHelper {
             tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 3, ?)', ['01/04/2021-21:12:13', 'this is the summary 13']);
             tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['01/04/2021-22:12:13', 'this is the summary 14']);
 
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 5, ?)', ['01/04/2021-17:12:13', 'this is the summary 15']);
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['01/04/2021-18:12:13', 'this is the summary 16']);
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['01/04/2021-19:12:13', 'this is the summary 17']);
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['01/04/2021-20:12:13', 'this is the summary 18']);
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 4, ?)', ['01/04/2021-21:12:13', 'this is the summary 19']);
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', ['01/04/2021-22:12:13', 'this is the summary 20']);
+            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 5, ?)', ['02/04/2021-17:12:13', 'this is the summary 15']);
+            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['02/04/2021-18:12:13', 'this is the summary 16']);
+            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['02/04/2021-19:12:13', 'this is the summary 17']);
+            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['02/04/2021-20:12:13', 'this is the summary 18']);
+            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 4, ?)', ['02/04/2021-21:12:13', 'this is the summary 19']);
+            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', ['02/04/2021-22:12:13', 'this is the summary 20']);
       
             tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 8.5, 0.5, 0, 3)', ['01/04/2021']);
             tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 9, 0, 0, 5)', ['02/04/2021']);

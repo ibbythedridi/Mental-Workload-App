@@ -2,16 +2,16 @@ import React from 'react';
 import {
     View,
     Text,
-    Button,
     TextInput,
     Keyboard,
     Platform
 } from 'react-native';
 import { globalStyles } from '../styles/global';
-import DBHelper from '../DBHelper';
+import DBHelper from '../components/dbHelper';
 import { showMessage } from 'react-native-flash-message';
 import { Picker } from '@react-native-picker/picker';
 import Moment from 'moment';
+import DButton from '../components/button';
 
 const dbHelper = new DBHelper();
 
@@ -60,47 +60,51 @@ export default function AddScreenTime({ navigation }) {
     
     return (
         <View style={globalStyles.container}>
-            <Text>Program Name</Text>
             <TextInput
                 style={globalStyles.input}
                 value={pName}
                 onChangeText={pName => setPName(pName)}
-                placeholder="program name"
+                placeholder="Program Name"
             />
 
-            <Text>Date</Text>
             <TextInput
                 style={globalStyles.input}
                 value={date}
                 onChangeText={date => setDate(date)}
-                placeholder="DD/MM/YYYY"
+                placeholder="Date: DD/MM/YYYY"
             />
 
-            <Text>Interval</Text>
             <TextInput
                 style={globalStyles.input}
                 value={interval}
                 onChangeText={interval => setInterval(interval)}
-                placeholder="hh:mm:ss-hh:mm:ss"
+                placeholder="Interval: hh:mm:ss-hh:mm:ss"
             />
 
-            <Text>Time</Text>
             <TextInput
                 style={globalStyles.input}
                 value={time}
                 onChangeText={time => setTime(time)}
                 keyboardType={'number-pad'}
-                placeholder="seconds"
+                placeholder="Time (s)"
             />
-
-            <Text>Category</Text>
+            
             <View
                 style={{
-                    marginBottom: Platform.OS === 'ios' ? 0 : 10,
+                    marginBottom: 10,
                     paddingBottom: Platform.OS === 'ios' ? 150 : 0,
-                    borderWidth: 1
+                    backgroundColor: '#eee',
+                    borderRadius: 7,
+                    marginBottom: 20,
+                    padding: 5,
+                    shadowColor: '#999',
+                    shadowOffset: { width: 0, height: 0 },
+                    shadowRadius: 3,
+                    shadowOpacity: 0.3,
+                    elevation: 3
                 }}    
             >
+                <Text style={globalStyles.cardHeading} >Category</Text>
                 <Picker
                     style={{
                         height:40
@@ -113,10 +117,8 @@ export default function AddScreenTime({ navigation }) {
                     <Picker.Item label='Unproductive' value='unproductive' />
                 </Picker>
             </View>
-            
-            
 
-            <Button title='Submit' onPress={submit} />
+            <DButton text='Submit' onPress={submit} />
         </View>
     )
 }
