@@ -6,7 +6,7 @@ exports[`renders correctly 1`] = `
     Object {
       "backgroundColor": "#fff",
       "flex": 1,
-      "padding": 10,
+      "padding": 15,
     }
   }
 >
@@ -29,7 +29,7 @@ exports[`renders correctly 1`] = `
     <View
       style={
         Object {
-          "backgroundColor": "#5863F8",
+          "backgroundColor": "#0043ff",
           "borderRadius": 7,
           "marginVertical": 5,
           "paddingHorizontal": 10,
@@ -78,7 +78,7 @@ exports[`renders correctly 1`] = `
     <View
       style={
         Object {
-          "backgroundColor": "#5863F8",
+          "backgroundColor": "#0043ff",
           "borderRadius": 7,
           "marginVertical": 5,
           "paddingHorizontal": 10,

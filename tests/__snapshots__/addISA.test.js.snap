@@ -6,82 +6,106 @@ exports[`renders correctly 1`] = `
     Object {
       "backgroundColor": "#fff",
       "flex": 1,
-      "padding": 10,
+      "padding": 15,
     }
   }
 >
-  <Text>
-    Date
-  </Text>
   <TextInput
     allowFontScaling={true}
     onChangeText={[Function]}
-    placeholder="DD/MM/YYYY"
+    placeholder="Date: DD/MM/YYYY"
     rejectResponderTermination={true}
     style={
       Object {
-        "borderWidth": 1,
+        "backgroundColor": "#eee",
+        "borderRadius": 7,
+        "elevation": 3,
         "height": 40,
-        "marginBottom": 10,
+        "marginBottom": 20,
         "padding": 5,
+        "shadowColor": "#999",
+        "shadowOffset": Object {
+          "height": 0,
+          "width": 0,
+        },
+        "shadowOpacity": 0.3,
+        "shadowRadius": 3,
       }
     }
     underlineColorAndroid="transparent"
     value=""
   />
-  <Text>
-    Time
-  </Text>
   <TextInput
     allowFontScaling={true}
     onChangeText={[Function]}
-    placeholder="hh:mm:ss"
+    placeholder="Time: hh:mm:ss"
     rejectResponderTermination={true}
     style={
       Object {
-        "borderWidth": 1,
+        "backgroundColor": "#eee",
+        "borderRadius": 7,
+        "elevation": 3,
         "height": 40,
-        "marginBottom": 10,
+        "marginBottom": 20,
         "padding": 5,
+        "shadowColor": "#999",
+        "shadowOffset": Object {
+          "height": 0,
+          "width": 0,
+        },
+        "shadowOpacity": 0.3,
+        "shadowRadius": 3,
       }
     }
     underlineColorAndroid="transparent"
     value=""
   />
-  <Text>
-    Workload Rating
-  </Text>
   <TextInput
     allowFontScaling={true}
     keyboardType="number-pad"
     onChangeText={[Function]}
-    placeholder="0-5"
+    placeholder="Workload Rating: 0-5"
     rejectResponderTermination={true}
     style={
       Object {
-        "borderWidth": 1,
+        "backgroundColor": "#eee",
+        "borderRadius": 7,
+        "elevation": 3,
         "height": 40,
-        "marginBottom": 10,
+        "marginBottom": 20,
         "padding": 5,
+        "shadowColor": "#999",
+        "shadowOffset": Object {
+          "height": 0,
+          "width": 0,
+        },
+        "shadowOpacity": 0.3,
+        "shadowRadius": 3,
       }
     }
     underlineColorAndroid="transparent"
     value=""
   />
-  <Text>
-    Summary
-  </Text>
   <TextInput
     allowFontScaling={true}
     onChangeText={[Function]}
-    placeholder="Summary of task"
+    placeholder="Summary"
     rejectResponderTermination={true}
     style={
       Object {
-        "borderWidth": 1,
+        "backgroundColor": "#eee",
+        "borderRadius": 7,
+        "elevation": 3,
         "height": 40,
-        "marginBottom": 10,
+        "marginBottom": 20,
         "padding": 5,
+        "shadowColor": "#999",
+        "shadowOffset": Object {
+          "height": 0,
+          "width": 0,
+        },
+        "shadowOpacity": 0.3,
+        "shadowRadius": 3,
       }
     }
     underlineColorAndroid="transparent"
@@ -106,7 +130,7 @@ exports[`renders correctly 1`] = `
     <View
       style={
         Object {
-          "backgroundColor": "#5863F8",
+          "backgroundColor": "#0043ff",
           "borderRadius": 7,
           "marginVertical": 5,
           "paddingHorizontal": 10,

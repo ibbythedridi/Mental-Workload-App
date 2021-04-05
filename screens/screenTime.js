@@ -5,12 +5,14 @@ import {
     Text
 } from 'react-native';
 import { globalStyles } from '../styles/global';
-import { VictoryBar, VictoryStack, VictoryLabel, VictoryChart, VictoryLegend } from 'victory-native';
+import { VictoryBar, VictoryStack, VictoryLabel, VictoryChart, VictoryLegend, VictoryPie, VictoryTheme } from 'victory-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DBHelper from '../components/dbHelper';
 import Moment from 'moment';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
 import DButton from '../components/button';
+import { G } from 'react-native-svg';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const dbHelper = new DBHelper();
 
@@ -74,10 +76,10 @@ export default function ScreenTime({ navigation }) {
                 productive = tempData[0],
                 neutral = tempData[1],
                 unproductive = tempData[2],
-                totalScreenTime = calcTime(tempData[3]),
-                productiveTime = calcTime(tempData[4]),
-                neutralTime = calcTime(tempData[5]),
-                unproductiveTime = calcTime(tempData[6]);
+                totalScreenTime = tempData[3],
+                productiveTime = tempData[4],
+                neutralTime = tempData[5],
+                unproductiveTime = tempData[6];
             }
 
             setShowChart(false);
@@ -113,24 +115,29 @@ export default function ScreenTime({ navigation }) {
             )}
             {showChart && (
                 <View>
-                    <VictoryChart domainPadding={30} >
-                        <VictoryLegend
-                            x = {windowWidth / 2 - 145}
-                            title='Legend'
-                            centerTitle
-                            orientation='horizontal'
-                            data={legend}
-                        />
-                        <VictoryStack colorScale={colours} style= {{ data: { stroke: '#000', strokeWidth: 1 }}} >
-                            <VictoryBar data={productive} />
-                            <VictoryBar data={neutral} />
-                            <VictoryBar data={unproductive} />
-                        </VictoryStack>
-                    </VictoryChart>
-                    <Text> Total Screen Time: {totalScreenTime} </Text>
-                    <Text> Productive Screen Time: {productiveTime} </Text>
-                    <Text> Neutral Screen Time: {neutralTime} </Text>
-                    <Text> Unproductive Screen Time: {unproductiveTime} </Text> 
+                    <View style={globalStyles.card} >
+                        <VictoryChart domainPadding={30} theme={VictoryTheme.material}  >
+                            <VictoryLegend
+                                x = {windowWidth / 2 - 145}
+                                title='Legend'
+                                centerTitle
+                                orientation='horizontal'
+                                data={legend}
+                            />
+                            <VictoryStack colorScale={colours} style= {{ data: { stroke: '#000', strokeWidth: 1 }}} >
+                                <VictoryBar data={productive} />
+                                <VictoryBar data={neutral} />
+                                <VictoryBar data={unproductive} />
+                            </VictoryStack>
+                        </VictoryChart>
+                    </View>
+                    <View style={globalStyles.card} >
+                        <Text style={globalStyles.cardHeading} > Info </Text>
+                        <Text style={globalStyles.cardText} > Total Screen Time: {calcTime(totalScreenTime)} </Text>
+                        <Text style={globalStyles.cardText} > Productive Screen Time: {calcTime(productiveTime)} </Text>
+                        <Text style={globalStyles.cardText} > Neutral Screen Time: {calcTime(neutralTime)} </Text>
+                        <Text style={globalStyles.cardText} > Unproductive Screen Time: {calcTime(unproductiveTime)} </Text> 
+                    </View>
                 </View>
             )}
             <DButton text='Add Data' onPress={() => navigation.navigate('AddScreenTime')} />

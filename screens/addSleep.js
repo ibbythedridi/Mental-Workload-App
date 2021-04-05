@@ -65,46 +65,43 @@ export default function AddSleep({ navigation }) {
 
     return (
         <View style={globalStyles.container}>
-            <Text>Date</Text>
             <TextInput
                 style={globalStyles.input}
                 value={date}
                 onChangeText={date => setDate(date)}
-                placeholder='DD/MM/YYYY'
+                placeholder='Date: DD/MM/YYYY'
             />
 
-            <Text>Hours in Bed</Text>
             <TextInput
                 style={globalStyles.input}
                 value={hoursInBed}
                 onChangeText={hoursInBed => setHoursInBed(hoursInBed)}
                 keyboardType={'numeric'}
+                placeholder='Hours in Bed'
             />
 
-            <Text>Hours until Sleep</Text>
             <TextInput
                 style={globalStyles.input}
                 value={hoursTilSleep}
                 onChangeText={hoursTilSleep => setHoursTilSleep(hoursTilSleep)}
                 keyboardType={'numeric'}
-                placeholder='in hours'
+                placeholder='Hours until Sleep'
             />
 
-            <Text>Number of Times Woken up Through the Night</Text>
             <TextInput
                 style={globalStyles.input}
                 value={timesWokenUp}
                 onChangeText={timesWokenUp => setTimesWokenUp(timesWokenUp)}
                 keyboardType={'number-pad'}
+                placeholder='Number of Times Woken up Through the Night'
             />
 
-            <Text>Sleep Quality Rating</Text>
             <TextInput
                 style={globalStyles.input}
                 value={sleepQuality}
                 onChangeText={sleepQuality => setSleepQuality(sleepQuality)}
                 keyboardType={'number-pad'}
-                placeholder='0-5'
+                placeholder='Sleep Quality Rating (0-5)'
             />
 
             <DButton text='Submit' onPress={submit} />

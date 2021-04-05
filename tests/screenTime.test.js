@@ -1,15 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import ScreenTime from '../screens/screenTime';
-import DBHelper from '../components/dbHelper';
-
-// An automatic mock of the DBHelper class, returns undefined to any calls
-jest.mock('../components/dbHelper');
-
-// Clear instances/calls
-beforeEach(() => {
-    DBHelper.mockClear();
-});
 
 it('renders correctly', () => {
     const tree = renderer.create(<ScreenTime />).toJSON();

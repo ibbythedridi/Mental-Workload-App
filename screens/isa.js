@@ -154,36 +154,37 @@ export default function ISA({ navigation }) {
                 />
             )}
             {/* ScrollView for horizontal scrolling when there's lots of data */}
-            {showChart1 && (<View>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
-                <VictoryChart 
-                    theme={VictoryTheme.material} 
-                    height = {300} 
-                    width={graphWidth} 
-                    >
-                    <VictoryLegend
-                        x={windowWidth / 2 - 100}
-                        title='Legend'
-                        centerTitle
-                        orientation='horizontal'
-                        data={legend}
-                    />
-                    <VictoryAxis tickValues={xAxis} />
-                    <VictoryAxis dependentAxis domain={ [1, 5] } />
-                    <VictoryGroup data={graphData}>
-                        <VictoryLine style={{ data: { stroke: colours[0] }}} />
-                        <VictoryScatter style = {{ data: { fill: colours[0] }}} />
-                    </VictoryGroup>
-                    
-                    {showChart2 && (
-                        <VictoryGroup data={compareData}>  
-                            <VictoryLine style={{ data: { stroke: colours[1] }}} />
-                            <VictoryScatter style = {{ data: { fill: colours[1] }}} />
-                        </VictoryGroup>
-                    )}
-                </VictoryChart>
-            </ScrollView>
-            <DButton text='Select Second Date' onPress={showCompPicker}/>
+            {showChart1 && (
+                <View style={globalStyles.card}>
+                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
+                        <VictoryChart 
+                            theme={VictoryTheme.material} 
+                            height = {300} 
+                            width={graphWidth} 
+                            >
+                            <VictoryLegend
+                                x={windowWidth / 2 - 100}
+                                title='Legend'
+                                centerTitle
+                                orientation='horizontal'
+                                data={legend}
+                            />
+                            <VictoryAxis tickValues={xAxis} />
+                            <VictoryAxis dependentAxis domain={ [1, 5] } />
+                            <VictoryGroup data={graphData}>
+                                <VictoryLine style={{ data: { stroke: colours[0] }}} />
+                                <VictoryScatter style = {{ data: { fill: colours[0] }}} />
+                            </VictoryGroup>
+                            
+                            {showChart2 && (
+                                <VictoryGroup data={compareData}>  
+                                    <VictoryLine style={{ data: { stroke: colours[1] }}} />
+                                    <VictoryScatter style = {{ data: { fill: colours[1] }}} />
+                                </VictoryGroup>
+                            )}
+                        </VictoryChart>
+                    </ScrollView>
+                <DButton text='Select Second Date' onPress={showCompPicker}/>
             </View>
             )}
             {/* Could add this button into the header instead? As a '+' button */}
