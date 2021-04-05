@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
     View,
     ScrollView,
-    Button,
     Dimensions,
     Platform
 } from 'react-native';
@@ -11,7 +10,8 @@ import { VictoryArea, VictoryChart, VictoryGroup, VictoryLegend, VictoryLine, Vi
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
 import FlashMessage, { showMessage } from "react-native-flash-message";
-import DBHelper from '../DBHelper';
+import DBHelper from '../components/dbHelper';
+import DButton from '../components/button';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -120,8 +120,8 @@ export default function Sleep({ navigation }) {
         <View style={globalStyles.container}>
             <ScrollView showsVerticalScrollIndicator={false} >
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }} >
-                    <Button title="'From' date" onPress={showFromPicker} />
-                    <Button title="'To' date" onPress={showToPicker} />
+                    <DButton text="'From' date" onPress={showFromPicker} />
+                    <DButton text="'To' date" onPress={showToPicker} />
                 </View>
 
                 {showPicker1 && (
@@ -199,7 +199,7 @@ export default function Sleep({ navigation }) {
                         </ScrollView>
                     </View>
                 )}
-                <Button title='Add Data' onPress={() => navigation.navigate('AddSleep')} />
+                <DButton text='Add Data' onPress={() => navigation.navigate('AddSleep')} />
                 <FlashMessage position='bottom' />
             </ScrollView>
         </View>

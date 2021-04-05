@@ -2,14 +2,14 @@ import React from 'react';
 import {
     View,
     Text,
-    Button,
     TextInput,
     Keyboard
 } from 'react-native';
 import { globalStyles } from '../styles/global';
-import DBHelper from '../DBHelper';
+import DBHelper from '../components/dbHelper';
 import Moment from 'moment';
 import { showMessage } from 'react-native-flash-message';
+import DButton from '../components/button';
 
 const dbHelper = new DBHelper();
 
@@ -97,7 +97,7 @@ export default function AddISA({ navigation }) {
                 placeholder="Summary of task"
             />
 
-            <Button title='Submit' onPress={submit} />
+            <DButton text='Submit' onPress={submit} />
         </View>
     )
 }

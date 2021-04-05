@@ -9,8 +9,8 @@ it('renders dashboard correctly', () => {
 
 // This checks the correct component(s) are existent in the JSON (views and buttons)
 describe("<Dashboard />", () => {
-  it('has 9 children (dashboard components)', () => {
+  it('has 5 children (dashboard components)', () => {
     const tree = renderer.create(<Dashboard />).toJSON();
-    expect(tree.children.length).toBe(9);
+    expect(tree.children.length).toBe(5);
   });
 });

@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
     View,
     ScrollView,
-    Button,
     Dimensions
 } from 'react-native';
 import { globalStyles } from '../styles/global';
@@ -10,7 +9,8 @@ import { VictoryChart, VictoryGroup, VictoryLine, VictoryScatter, VictoryTheme, 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
 import FlashMessage, { showMessage } from "react-native-flash-message";
-import DBHelper from '../DBHelper';
+import DBHelper from '../components/dbHelper';
+import DButton from '../components/button';
 
 const dbHelper = new DBHelper();
 
@@ -41,7 +41,7 @@ export default function ISA({ navigation }) {
     const [showChart2, setShowChart2] = useState(false);
 
     const onChangeDate = async (event, selectedDate) => {
-        setShowPicker1(Platform.OS === 'ios');
+        setShowPicker1(!Platform.OS === 'ios');
         // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
         if (selectedDate) {
             let dateSelect = Moment(selectedDate).format('DD/MM/YYYY');
@@ -79,7 +79,7 @@ export default function ISA({ navigation }) {
     }
 
     const onChangeComp = async(event, selectedDate) => {
-        setShowPicker2(Platform.OS === 'ios');
+        setShowPicker2(!Platform.OS === 'ios');
         // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
         if (selectedDate) {
             let dateComp = Moment(selectedDate).format('DD/MM/YYYY');
@@ -136,7 +136,7 @@ export default function ISA({ navigation }) {
 
     return (
         <View style={globalStyles.container}>
-            <Button title='Pick date' onPress={showDatePicker} />
+            <DButton text='Pick date' onPress={showDatePicker} />
             {showPicker1 && (<DateTimePicker
                 testID="dateTimePicker1"
                 value={date1}
@@ -183,11 +183,11 @@ export default function ISA({ navigation }) {
                     )}
                 </VictoryChart>
             </ScrollView>
-            <Button title='Select Second Date' onPress={showCompPicker}/>
+            <DButton text='Select Second Date' onPress={showCompPicker}/>
             </View>
             )}
             {/* Could add this button into the header instead? As a '+' button */}
-            <Button title='Add Data' onPress={() => navigation.navigate('AddISA')} />
+            <DButton text='Add Data' onPress={() => navigation.navigate('AddISA')} />
             <FlashMessage position='bottom' />
         </View>
     )

@@ -1,15 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import Sleep from '../screens/sleep';
-import DBHelper from '../DBHelper';
-
-// An automatic mock of the DBHelper class, returns undefined to any calls
-jest.mock('../DBHelper');
-
-// Clear instances/calls
-beforeEach(() => {
-    DBHelper.mockClear();
-});
 
 it('renders correctly', () => {
     const tree = renderer.create(<Sleep />).toJSON();

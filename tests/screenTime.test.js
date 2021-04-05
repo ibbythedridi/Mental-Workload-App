@@ -1,10 +1,10 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import ScreenTime from '../screens/screenTime';
-import DBHelper from '../DBHelper';
+import DBHelper from '../components/dbHelper';
 
 // An automatic mock of the DBHelper class, returns undefined to any calls
-jest.mock('../DBHelper');
+jest.mock('../components/dbHelper');
 
 // Clear instances/calls
 beforeEach(() => {

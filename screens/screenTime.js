@@ -1,16 +1,16 @@
 import React, {useState} from 'react';
 import {
     View,
-    Button,
     Dimensions,
     Text
 } from 'react-native';
 import { globalStyles } from '../styles/global';
 import { VictoryBar, VictoryStack, VictoryLabel, VictoryChart, VictoryLegend } from 'victory-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import DBHelper from '../DBHelper';
+import DBHelper from '../components/dbHelper';
 import Moment from 'moment';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
+import DButton from '../components/button';
 
 const dbHelper = new DBHelper();
 
@@ -60,7 +60,7 @@ export default function ScreenTime({ navigation }) {
     const [showChart, setShowChart] = useState(false);
 
     const onChange = async (event, selectedDate) => {
-        setShowPicker(Platform.OS === 'ios');
+        setShowPicker(!Platform.OS === 'ios');
         let dateSelect = Moment(selectedDate).format('DD/MM/YYYY');
         // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
         if (selectedDate) {
@@ -101,7 +101,7 @@ export default function ScreenTime({ navigation }) {
 
     return (
         <View style={globalStyles.container}>
-            <Button title='Pick Date' onPress={showDatePicker} />
+            <DButton text='Pick Date' onPress={showDatePicker} />
             {showPicker && (
                 <DateTimePicker
                     testID='dateTimePicker'
@@ -133,7 +133,7 @@ export default function ScreenTime({ navigation }) {
                     <Text> Unproductive Screen Time: {unproductiveTime} </Text> 
                 </View>
             )}
-            <Button title='Add Data' onPress={() => navigation.navigate('AddScreenTime')} />
+            <DButton text='Add Data' onPress={() => navigation.navigate('AddScreenTime')} />
             <FlashMessage position='bottom' />
         </View>
     )

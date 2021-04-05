@@ -9,8 +9,8 @@ it('renders correctly', () => {
 
 // This checks the correct component(s) are existent in the JSON (views and buttons)
 describe("<AddData />", () => {
-  it('has 6 children', () => {
+  it('has 4 children', () => {
     const tree = renderer.create(<AddData />).toJSON();
-    expect(tree.children.length).toBe(6);
+    expect(tree.children.length).toBe(4);
   });
 });

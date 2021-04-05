@@ -1,24 +1,19 @@
 import React from 'react';
 import {
     View,
-    Text,
-    Button
 } from 'react-native';
 import { globalStyles } from '../styles/global';
+import DButton from '../components/button';
 
 export default function Dashboard({ navigation }) {
 
     return (
         <View style={globalStyles.container}>
-            <Button title='ISA' onPress={() => navigation.navigate('ISA')} />
-            <View style={{ height: 20 }} />
-            <Button title='Screen Time' onPress={() => navigation.navigate('ScreenTime')} />
-            <View style={{ height: 20 }} />
-            <Button title='Sleep' onPress={() => navigation.navigate('Sleep')} />
-            <View style={{ height: 20 }} />
-            <Button title='Add Data' onPress={() => navigation.navigate('AddData')} />
-            <View style={{ height: 20 }} />
-            <Button title='Settings' onPress={() => navigation.navigate('Settings')} />
+            <DButton text='ISA' onPress={() => navigation.navigate('ISA')} />
+            <DButton text='Screen Time' onPress={() => navigation.navigate('ScreenTime')} />
+            <DButton text='Sleep' onPress={() => navigation.navigate('Sleep')} />
+            <DButton text='Add Data' onPress={() => navigation.navigate('AddData')} />
+            <DButton text='Settings' onPress={() => navigation.navigate('Settings')} />
         </View>
     )
 }

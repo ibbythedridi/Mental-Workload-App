@@ -5,7 +5,8 @@ import {
 export const globalStyles = StyleSheet.create({
     container: {
       flex: 1,
-      padding: 10
+      padding: 10,
+      backgroundColor: '#fff'
     },
     chart: {
       borderRadius: 10,
@@ -23,6 +24,21 @@ export const globalStyles = StyleSheet.create({
       padding: 5
     },
     button: {
-      marginVertical: 20
+      borderRadius: 7,
+      marginVertical: 5,
+      paddingVertical: 10,
+      paddingHorizontal: 10,
+      backgroundColor: '#5863F8',
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 1,
+      shadowOpacity: 1.0,
+    },
+    butText: {
+      color: '#fff',
+      fontWeight: 'bold',
+      textTransform: 'uppercase',
+      fontSize: 16,
+      textAlign: 'center'
     }
   });

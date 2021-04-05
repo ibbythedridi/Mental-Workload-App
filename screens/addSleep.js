@@ -4,12 +4,12 @@ import {
     Text,
     TextInput,
     Keyboard,
-    Button
 } from 'react-native';
-import DBHelper from '../DBHelper';
+import DBHelper from '../components/dbHelper';
 import { showMessage } from 'react-native-flash-message';
 import { globalStyles } from '../styles/global';
 import Moment from 'moment';
+import DButton from '../components/button';
 
 const dbHelper = new DBHelper();
 
@@ -107,7 +107,7 @@ export default function AddSleep({ navigation }) {
                 placeholder='0-5'
             />
 
-            <Button title='Submit' onPress={submit} />
+            <DButton text='Submit' onPress={submit} />
 
         </View>
     )

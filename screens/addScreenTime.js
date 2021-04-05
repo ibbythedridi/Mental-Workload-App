@@ -2,16 +2,16 @@ import React from 'react';
 import {
     View,
     Text,
-    Button,
     TextInput,
     Keyboard,
     Platform
 } from 'react-native';
 import { globalStyles } from '../styles/global';
-import DBHelper from '../DBHelper';
+import DBHelper from '../components/dbHelper';
 import { showMessage } from 'react-native-flash-message';
 import { Picker } from '@react-native-picker/picker';
 import Moment from 'moment';
+import DButton from '../components/button';
 
 const dbHelper = new DBHelper();
 
@@ -113,10 +113,8 @@ export default function AddScreenTime({ navigation }) {
                     <Picker.Item label='Unproductive' value='unproductive' />
                 </Picker>
             </View>
-            
-            
 
-            <Button title='Submit' onPress={submit} />
+            <DButton text='Submit' onPress={submit} />
         </View>
     )
 }
