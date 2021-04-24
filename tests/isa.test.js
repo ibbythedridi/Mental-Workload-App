@@ -1,18 +1,44 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
+import AppContext from '../components/AppContext';
 import ISA from '../screens/isa';
 
-it('renders correctly', () => {
-  const tree = renderer.create(<ISA />).toJSON();
-  expect(tree).toMatchSnapshot();
+describe("ISA (Debug mode off)", () => {
+  it('renders correctly', () => {
+    const tree = renderer.create(
+        <AppContext.Provider value={{debugMode:false}}>
+          <ISA />
+        </AppContext.Provider>
+      ).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('has 2 children', () => {
+    const tree = renderer.create(
+      <AppContext.Provider value={{debugMode:false}}>
+        <ISA />
+      </AppContext.Provider>
+    ).toJSON();
+    expect(tree.children.length).toBe(2);
+  });
 });
 
-// This checks the correct component(s) are existent in the JSON (views and buttons)
-// 3 children in the default view without any states changed
-describe("<ISA />", () => {
-  it('has 3 children', () => {
+describe("ISA (Debug mode on)", () => {
+  it('renders correctly', () => {
+    const tree = renderer.create(
+        <AppContext.Provider value={{debugMode:true}}>
+          <ISA />
+        </AppContext.Provider>
+      ).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
 
-    const tree = renderer.create(<ISA />).toJSON();
+  it('has 3 children', () => {
+    const tree = renderer.create(
+      <AppContext.Provider value={{debugMode:true}}>
+        <ISA />
+      </AppContext.Provider>
+    ).toJSON();
     expect(tree.children.length).toBe(3);
   });
 });

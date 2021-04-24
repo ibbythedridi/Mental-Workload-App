@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
     View,
     ScrollView,
@@ -11,6 +11,7 @@ import Moment from 'moment';
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import DBHelper from '../components/dbHelper';
 import DButton from '../components/button';
+import AppContext from '../components/AppContext';
 
 const dbHelper = new DBHelper();
 
@@ -30,6 +31,8 @@ var xAxis = [];
 var legend = [];
 
 export default function ISA({ navigation }) {
+
+    const myContext = useContext(AppContext);
 
     var graphWidth = xAxis.length*60 + 100;
 
@@ -187,8 +190,11 @@ export default function ISA({ navigation }) {
                 <DButton text='Select Second Date' onPress={showCompPicker}/>
             </View>
             )}
-            {/* Could add this button into the header instead? As a '+' button */}
-            <DButton text='Add Data' onPress={() => navigation.navigate('AddISA')} />
+
+            {myContext.debugMode && (
+                <DButton text='Add Data' onPress={() => navigation.navigate('AddISA')} />
+            )}
+
             <FlashMessage position='bottom' />
         </View>
     )

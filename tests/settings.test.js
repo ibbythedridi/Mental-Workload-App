@@ -1,16 +1,26 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import Settings from '../screens/settings';
+import AppContext from '../components/AppContext';
 
-it('renders settings correctly', () => {
-  const tree = renderer.create(<Settings />).toJSON();
-  expect(tree).toMatchSnapshot();
-});
+jest.useFakeTimers();
 
-// This checks the correct component(s) are existent in the JSON
-describe("<Settings />", () => {
-  it('has 1 child', () => {
-    const tree = renderer.create(<Settings />).toJSON();
-    expect(tree.children.length).toBe(1);
+describe("Settings", () => {
+  it('renders settings correctly', () => {
+    const tree = renderer.create(
+      <AppContext.Provider value={{debugMode:false}}>
+        <Settings />
+      </AppContext.Provider>
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('has 2 children', () => {
+    const tree = renderer.create(
+      <AppContext.Provider value={{debugMode:false}}>
+        <Settings />
+      </AppContext.Provider>
+    ).toJSON();
+    expect(tree.children.length).toBe(2);
   });
 });

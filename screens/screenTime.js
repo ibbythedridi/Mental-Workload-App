@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
     View,
     Dimensions,
@@ -11,8 +11,7 @@ import DBHelper from '../components/dbHelper';
 import Moment from 'moment';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
 import DButton from '../components/button';
-import { G } from 'react-native-svg';
-import { ScrollView } from 'react-native-gesture-handler';
+import AppContext from '../components/AppContext';
 
 const dbHelper = new DBHelper();
 
@@ -56,6 +55,8 @@ function calcTime(time) {
 }
 
 export default function ScreenTime({ navigation }) {
+
+    const myContext = useContext(AppContext);
 
     const [date, setDate] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
@@ -140,7 +141,11 @@ export default function ScreenTime({ navigation }) {
                     </View>
                 </View>
             )}
-            <DButton text='Add Data' onPress={() => navigation.navigate('AddScreenTime')} />
+
+            {myContext.debugMode && (
+                <DButton text='Add Data' onPress={() => navigation.navigate('AddScreenTime')} />
+            )}
+            
             <FlashMessage position='bottom' />
         </View>
     )

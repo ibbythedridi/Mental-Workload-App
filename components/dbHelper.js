@@ -22,7 +22,6 @@ function addTime(time, interval, cat) {
 }
 
 export default class DBHelper {
-    
     // Creates database tables
     initDB() {
         db.transaction(tx => {
@@ -59,53 +58,63 @@ export default class DBHelper {
 
     // Populates database with example data (for dev purposes)
     exampleData() {
-        db.transaction(tx => {
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 3, ?)', ['01/04/2021-17:12:13', 'this is the summary 9']);
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', ['01/04/2021-18:12:13', 'this is the summary 10']);
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', ['01/04/2021-19:12:13', 'this is the summary 11']);
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', ['01/04/2021-20:12:13', 'this is the summary 12']);
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 3, ?)', ['01/04/2021-21:12:13', 'this is the summary 13']);
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['01/04/2021-22:12:13', 'this is the summary 14']);
+        let date = Moment(new Date()).format('DD/MM/YYYY');
+        let tomorrow = Moment().add(1, 'days').format('DD/MM/YYYY');
 
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 5, ?)', ['02/04/2021-17:12:13', 'this is the summary 15']);
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['02/04/2021-18:12:13', 'this is the summary 16']);
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['02/04/2021-19:12:13', 'this is the summary 17']);
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', ['02/04/2021-20:12:13', 'this is the summary 18']);
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 4, ?)', ['02/04/2021-21:12:13', 'this is the summary 19']);
-            tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', ['02/04/2021-22:12:13', 'this is the summary 20']);
-      
-            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 8.5, 0.5, 0, 3)', ['01/04/2021']);
-            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 9, 0, 0, 5)', ['02/04/2021']);
-            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 8, 1, 1, 2)', ['03/04/2021']);
-            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 8.5, 0, 0, 3)', ['04/04/2021']);
-            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 9.5, 0.5, 2, 5)', ['05/04/2021']);
-            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 7, 0.5, 0, 1)', ['06/04/2021']);
-            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 9, 0, 0, 5)', ['07/04/2021']);
-            tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 8.5, 1.5, 1, 3)', ['08/04/2021']);
-      
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 120, ?)', ['Microsoft Word', '01/04/2021', '11:00:00-11:30:00', 'productive']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 25, ?)', ['Adobe Reader', '01/04/2021', '11:00:00-11:30:00', 'productive']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 125, ?)', ['Microsoft Outlook', '01/04/2021', '11:00:00-11:30:00', 'productive']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 20, ?)', ['wordpress.com', '01/04/2021', '11:00:00-11:30:00', 'neutral']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 11, ?)', ['Photos', '01/04/2021', '11:00:00-11:30:00', 'neutral']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 204, ?)', ['youtube.com', '01/04/2021', '11:00:00-11:30:00', 'unproductive']);
+        return new Promise((resolve, reject) =>
+            db.transaction(tx => {
+                try {
+                    tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 3, ?)', [date+'-17:12:13', 'this is the summary 9']);
+                    tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', [date+'-18:12:13', 'this is the summary 10']);
+                    tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', [date+'-19:12:13', 'this is the summary 11']);
+                    tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', [date+'-20:12:13', 'this is the summary 12']);
+                    tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 3, ?)', [date+'-21:12:13', 'this is the summary 13']);
+                    tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', [date+'-22:12:13', 'this is the summary 14']);
+    
+                    tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 5, ?)', [tomorrow+'-17:12:13', 'this is the summary 15']);
+                    tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', [tomorrow+'-18:12:13', 'this is the summary 16']);
+                    tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', [tomorrow+'-19:12:13', 'this is the summary 17']);
+                    tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 2, ?)', [tomorrow+'-20:12:13', 'this is the summary 18']);
+                    tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 4, ?)', [tomorrow+'-21:12:13', 'this is the summary 19']);
+                    tx.executeSql('INSERT INTO isa (dateTime, workloadRating, summary) values (?, 1, ?)', [tomorrow+'-22:12:13', 'this is the summary 20']);
+            
+                    tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 8.5, 0.5, 0, 3)', [date]);
+                    tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 9, 0, 0, 5)', [Moment().add(1, 'days').format('DD/MM/YYYY')]);
+                    tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 8, 1, 1, 2)', [Moment().add(2, 'days').format('DD/MM/YYYY')]);
+                    tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 8.5, 0, 0, 3)', [Moment().add(3, 'days').format('DD/MM/YYYY')]);
+                    tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 9.5, 0.5, 2, 5)', [Moment().add(4, 'days').format('DD/MM/YYYY')]);
+                    tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 7, 0.5, 0, 1)', [Moment().add(5, 'days').format('DD/MM/YYYY')]);
+                    tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 9, 0, 0, 5)', [Moment().add(6, 'days').format('DD/MM/YYYY')]);
+                    tx.executeSql('INSERT INTO sleep (date, hoursInBed, hoursUntilSleep, timesWokenUp, sleepQuality) values (?, 8.5, 1.5, 1, 3)', [Moment().add(7, 'days').format('DD/MM/YYYY')]);
+            
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 120, ?)', ['Microsoft Word', date, '11:00:00-11:30:00', 'productive']);
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 25, ?)', ['Adobe Reader', date, '11:00:00-11:30:00', 'productive']);
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 125, ?)', ['Microsoft Outlook', date, '11:00:00-11:30:00', 'productive']);
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 20, ?)', ['wordpress.com', date, '11:00:00-11:30:00', 'neutral']);
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 11, ?)', ['Photos', date, '11:00:00-11:30:00', 'neutral']);
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 204, ?)', ['youtube.com', date, '11:00:00-11:30:00', 'unproductive']);
+    
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 700, ?)', ['Microsoft Word', date, '11:30:00-12:00:00', 'productive']);
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 254, ?)', ['Adobe Reader', date, '11:30:00-12:00:00', 'productive']);
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 225, ?)', ['Microsoft Outlook', date, '11:30:00-12:00:00', 'productive']);
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 203, ?)', ['wordpress.com', date, '11:30:00-12:00:00', 'neutral']);
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 111, ?)', ['Photos', date, '11:30:00-12:00:00', 'neutral']);
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 202, ?)', ['youtube.com', date, '11:30:00-12:00:00', 'unproductive']);
+    
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 100, ?)', ['Microsoft Word', date, '12:30:00-13:00:00', 'productive']);
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 25, ?)', ['Adobe Reader', date, '12:30:00-13:00:00', 'productive']);
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 225, ?)', ['Microsoft Outlook', date, '12:30:00-13:00:00', 'productive']);
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 20, ?)', ['wordpress.com', date, '12:30:00-13:00:00', 'neutral']);
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 111, ?)', ['Photos', date, '12:30:00-13:00:00', 'neutral']);
+                    tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 20, ?)', ['youtube.com', date, '12:30:00-13:00:00', 'unproductive']);
 
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 700, ?)', ['Microsoft Word', '01/04/2021', '11:30:00-12:00:00', 'productive']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 254, ?)', ['Adobe Reader', '01/04/2021', '11:30:00-12:00:00', 'productive']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 225, ?)', ['Microsoft Outlook', '01/04/2021', '11:30:00-12:00:00', 'productive']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 203, ?)', ['wordpress.com', '01/04/2021', '11:30:00-12:00:00', 'neutral']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 111, ?)', ['Photos', '01/04/2021', '11:30:00-12:00:00', 'neutral']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 202, ?)', ['youtube.com', '01/04/2021', '11:30:00-12:00:00', 'unproductive']);
-
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 100, ?)', ['Microsoft Word', '01/04/2021', '12:30:00-13:00:00', 'productive']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 25, ?)', ['Adobe Reader', '01/04/2021', '12:30:00-13:00:00', 'productive']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 225, ?)', ['Microsoft Outlook', '01/04/2021', '12:30:00-13:00:00', 'productive']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 20, ?)', ['wordpress.com', '01/04/2021', '12:30:00-13:00:00', 'neutral']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 111, ?)', ['Photos', '01/04/2021', '12:30:00-13:00:00', 'neutral']);
-            tx.executeSql('INSERT INTO screenTime (name, date, interval, time, category) values (?, ?, ?, 20, ?)', ['youtube.com', '01/04/2021', '12:30:00-13:00:00', 'unproductive']);
-
-            console.log("Example Data Inserted!");
-        });
+                    resolve(true)
+                } catch(error) {
+                    reject(error);
+                }
+                
+        }));
+        
     }
 
     // Retrieve ISA data to be displayed on graph
