@@ -10,8 +10,103 @@ exports[`renders settings correctly 1`] = `
     }
   }
 >
-  <Text>
-    Settings
-  </Text>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#f2f3f7",
+        "borderRadius": 7,
+        "elevation": 3,
+        "marginVertical": 10,
+        "padding": 10,
+        "shadowColor": "#222",
+        "shadowOffset": Object {
+          "height": 0,
+          "width": 0,
+        },
+        "shadowOpacity": 0.2,
+        "shadowRadius": 3,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#333",
+          "fontSize": 20,
+          "fontWeight": "bold",
+          "textAlign": "center",
+          "textTransform": "uppercase",
+        }
+      }
+    >
+      Developer Options
+    </Text>
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "opacity": 1,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "backgroundColor": "#0043ff",
+            "borderRadius": 7,
+            "marginVertical": 5,
+            "paddingHorizontal": 10,
+            "paddingVertical": 10,
+            "shadowColor": "#000",
+            "shadowOffset": Object {
+              "height": 0,
+              "width": 0,
+            },
+            "shadowOpacity": 1,
+            "shadowRadius": 1,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#fff",
+              "fontSize": 16,
+              "fontWeight": "bold",
+              "textAlign": "center",
+              "textTransform": "uppercase",
+            }
+          }
+        >
+          Add Example Data
+        </Text>
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "bottom": 0,
+        "left": 0,
+        "opacity": 0,
+        "position": "absolute",
+        "right": 0,
+        "transform": Array [
+          Object {
+            "translateY": 48,
+          },
+        ],
+        "zIndex": 99,
+      }
+    }
+  />
 </View>
 `;
