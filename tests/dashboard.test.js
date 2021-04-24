@@ -1,16 +1,44 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
+import AppContext from '../components/AppContext';
 import Dashboard from '../screens/dashboard';
 
-it('renders dashboard correctly', () => {
-  const tree = renderer.create(<Dashboard />).toJSON();
-  expect(tree).toMatchSnapshot();
+describe("Dashboard (Debug mode off)", () => {
+  it('renders dashboard correctly', () => {
+    const tree = renderer.create(
+        <AppContext.Provider value={{debugMode:false}}>
+          <Dashboard />
+        </AppContext.Provider>
+      ).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('has 4 children', () => {
+    const tree = renderer.create(
+      <AppContext.Provider value={{debugMode:false}}>
+        <Dashboard />
+      </AppContext.Provider>
+    ).toJSON();
+    expect(tree.children.length).toBe(4);
+  });
 });
 
-// This checks the correct component(s) are existent in the JSON (views and buttons)
-describe("<Dashboard />", () => {
-  it('has 5 children (dashboard components)', () => {
-    const tree = renderer.create(<Dashboard />).toJSON();
+describe("Dashboard (Debug mode on)", () => {
+  it('renders dashboard correctly', () => {
+    const tree = renderer.create(
+        <AppContext.Provider value={{debugMode:true}}>
+          <Dashboard />
+        </AppContext.Provider>
+      ).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('has 5 children', () => {
+    const tree = renderer.create(
+      <AppContext.Provider value={{debugMode:true}}>
+        <Dashboard />
+      </AppContext.Provider>
+    ).toJSON();
     expect(tree.children.length).toBe(5);
   });
 });

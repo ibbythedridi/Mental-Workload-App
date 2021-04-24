@@ -71,6 +71,17 @@ export const globalStyles = StyleSheet.create({
       padding: 10,
       marginVertical: 10
     },
+    subCard: {
+      backgroundColor: '#e4e4e9',
+      borderRadius: 7,
+      shadowColor: '#222',
+      shadowOffset: { width: 0, height: 0 },
+      shadowRadius: 3,
+      shadowOpacity: 0.2,
+      elevation: 3,
+      padding: 10,
+      marginVertical: 10
+    },
     cardHeading: {
       color: '#333',
       fontWeight: 'bold',
@@ -79,6 +90,7 @@ export const globalStyles = StyleSheet.create({
       textAlign: 'center'
     },
     cardText: {
-      color: '#333'
+      color: '#555',
+      padding: 10
     }
   });

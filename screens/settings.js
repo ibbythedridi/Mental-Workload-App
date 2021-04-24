@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
     View,
     Text
@@ -7,10 +7,14 @@ import { globalStyles } from '../styles/global';
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import DBHelper from '../components/dbHelper';
 import DButton from '../components/button';
+import AppContext from '../components/AppContext';
+import ToggleSwitch from 'toggle-switch-react-native';
 
 const dbHelper = new DBHelper();
 
 export default function Settings() {
+
+    const myContext = useContext(AppContext);
 
     const [exampleData, setExampleData] = useState(true);
 
@@ -34,6 +38,19 @@ export default function Settings() {
         <View style={globalStyles.container}>
             <View style={globalStyles.card}>
                 <Text style={globalStyles.cardHeading}>Developer Options</Text>
+                <View style={globalStyles.subCard}>
+                    <ToggleSwitch
+                        isOn={myContext.debugMode}
+                        onColor='green'
+                        offColor='red'
+                        label='Debug Mode'
+                        labelStyle={{ color: '#333', fontSize: 15 }}
+                        size='large'
+                        onToggle={myContext.debugToggle}
+                    />
+                    <Text style={globalStyles.cardText}>Debug mode allows you to add data</Text>
+                </View>
+                
                 {exampleData && (
                     <DButton text='Add Example Data' onPress={addData} />
                 )}

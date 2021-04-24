@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
     View,
     ScrollView,
@@ -12,6 +12,7 @@ import Moment from 'moment';
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import DBHelper from '../components/dbHelper';
 import DButton from '../components/button';
+import AppContext from '../components/AppContext';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -32,6 +33,8 @@ var hoursInBedData = [],
     sleepQualityData = [];
 
 export default function Sleep({ navigation }) {
+
+    const myContext = useContext(AppContext);
 
     var graphWidth = hoursInBedData.length*60+70;
     // If graph width is less than window width, set the graph width to window width
@@ -203,7 +206,11 @@ export default function Sleep({ navigation }) {
                         </View>
                     </View>
                 )}
-                <DButton text='Add Data' onPress={() => navigation.navigate('AddSleep')} />
+
+                {myContext.debugMode && (
+                    <DButton text='Add Data' onPress={() => navigation.navigate('AddSleep')} />
+                )}
+                
                 <FlashMessage position='bottom' />
             </ScrollView>
         </View>
