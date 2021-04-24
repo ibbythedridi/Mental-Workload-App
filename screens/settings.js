@@ -51,8 +51,8 @@ export default function Settings() {
                     <Text style={globalStyles.cardText}>Debug mode allows you to add data</Text>
                 </View>
                 
-                {exampleData && (
-                    <DButton text='Add Example Data' onPress={addData} />
+                {exampleData && myContext.debugMode && (
+                    <DButton text='Generate Example Data' onPress={addData} />
                 )}
             </View>
             

@@ -164,55 +164,6 @@ exports[`Settings renders settings correctly 1`] = `
         Debug mode allows you to add data
       </Text>
     </View>
-    <View
-      accessible={true}
-      focusable={true}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
-      style={
-        Object {
-          "opacity": 1,
-        }
-      }
-    >
-      <View
-        style={
-          Object {
-            "backgroundColor": "#0043ff",
-            "borderRadius": 7,
-            "marginVertical": 5,
-            "paddingHorizontal": 10,
-            "paddingVertical": 10,
-            "shadowColor": "#000",
-            "shadowOffset": Object {
-              "height": 0,
-              "width": 0,
-            },
-            "shadowOpacity": 1,
-            "shadowRadius": 1,
-          }
-        }
-      >
-        <Text
-          style={
-            Object {
-              "color": "#fff",
-              "fontSize": 16,
-              "fontWeight": "bold",
-              "textAlign": "center",
-              "textTransform": "uppercase",
-            }
-          }
-        >
-          Add Example Data
-        </Text>
-      </View>
-    </View>
   </View>
   <View
     style={
