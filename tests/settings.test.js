@@ -3,6 +3,8 @@ import renderer from 'react-test-renderer';
 import Settings from '../screens/settings';
 import AppContext from '../components/AppContext';
 
+jest.useFakeTimers();
+
 describe("Settings", () => {
   it('renders settings correctly', () => {
     const tree = renderer.create(
