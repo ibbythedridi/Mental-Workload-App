@@ -12,6 +12,9 @@ import ToggleSwitch from 'toggle-switch-react-native';
 
 const dbHelper = new DBHelper();
 
+let dData,
+    exData;
+
 export default function Settings() {
 
     const myContext = useContext(AppContext);
@@ -19,13 +22,28 @@ export default function Settings() {
     const [exampleData, setExampleData] = useState(true);
 
     const addData = async () => {
-        let exData = await dbHelper.exampleData();
+        exData = await dbHelper.exampleData();
         if (exData == true) {
             showMessage({
                 message: 'Example Data Added Successfully',
                 type: 'success',
             });
             setExampleData(false);
+        } else {
+            showMessage({
+                message: 'Something went wrong',
+                type: 'danger',
+            });
+        }
+    }
+
+    const delData = async () => {
+        dData = await dbHelper.delData();
+        if (dData == true) {
+            showMessage({
+                message: 'Data Deleted Successfully',
+                type: 'success',
+            });
         } else {
             showMessage({
                 message: 'Something went wrong',
@@ -53,6 +71,10 @@ export default function Settings() {
                 
                 {exampleData && myContext.debugMode && (
                     <DButton text='Generate Example Data' onPress={addData} />
+                )}
+
+                {myContext.debugMode && (
+                    <DButton text='Delete all Data' onPress={delData}/>
                 )}
             </View>
             

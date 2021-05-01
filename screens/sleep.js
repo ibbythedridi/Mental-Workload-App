@@ -210,9 +210,8 @@ export default function Sleep({ navigation }) {
                 {myContext.debugMode && (
                     <DButton text='Add Data' onPress={() => navigation.navigate('AddSleep')} />
                 )}
-                
-                <FlashMessage position='bottom' />
             </ScrollView>
+            <FlashMessage position='bottom' />
         </View>
     )
 }

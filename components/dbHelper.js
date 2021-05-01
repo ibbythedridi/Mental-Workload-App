@@ -117,6 +117,21 @@ export default class DBHelper {
         
     }
 
+    // Delete all data
+    delData() {
+        return new Promise((resolve, reject) =>
+            db.transaction(tx => {
+                try {
+                    tx.executeSql('delete from isa');
+                    tx.executeSql('delete from sleep');
+                    tx.executeSql('delete from screentime');
+                    resolve(true);
+                } catch (error) {
+                    reject(error);
+                }
+        }));
+    }
+
     // Retrieve ISA data to be displayed on graph
     getISAData(date, xAxis) {
         let data = [];

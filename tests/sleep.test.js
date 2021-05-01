@@ -13,12 +13,12 @@ describe("Sleep", () => {
       expect(tree).toMatchSnapshot();
   });
 
-  it('has 1 child', () => {
+  it('has 2 children', () => {
     const tree = renderer.create(
       <AppContext.Provider value={{debugMode:false}}>
         <Sleep />
       </AppContext.Provider>
     ).toJSON();
-    expect(tree.children.length).toBe(1);
+    expect(tree.children.length).toBe(2);
   });
 });
