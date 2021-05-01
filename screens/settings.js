@@ -66,7 +66,7 @@ export default function Settings() {
                         size='large'
                         onToggle={myContext.debugToggle}
                     />
-                    <Text style={globalStyles.cardText}>Debug mode allows you to add data</Text>
+                    <Text style={globalStyles.cardText}>Debug mode allows you to add/delete data</Text>
                 </View>
                 
                 {exampleData && myContext.debugMode && (

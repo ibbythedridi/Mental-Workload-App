@@ -161,7 +161,7 @@ exports[`Settings renders settings correctly 1`] = `
           }
         }
       >
-        Debug mode allows you to add data
+        Debug mode allows you to add/delete data
       </Text>
     </View>
   </View>
