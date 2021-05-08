@@ -1,44 +1,44 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import AppContext from '../components/AppContext';
-import Dashboard from '../screens/dashboard';
+import ISA from '../screens/isa';
 
-describe("Dashboard (Debug mode off)", () => {
-  it('renders dashboard correctly', () => {
+describe("ISA (Debug mode off)", () => {
+  it('renders correctly', () => {
     const tree = renderer.create(
         <AppContext.Provider value={{debugMode:false}}>
-          <Dashboard />
+          <ISA />
         </AppContext.Provider>
       ).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
-  it('has 4 children', () => {
+  it('has 2 children', () => {
     const tree = renderer.create(
       <AppContext.Provider value={{debugMode:false}}>
-        <Dashboard />
+        <ISA />
       </AppContext.Provider>
     ).toJSON();
-    expect(tree.children.length).toBe(4);
+    expect(tree.children.length).toBe(2);
   });
 });
 
-describe("Dashboard (Debug mode on)", () => {
-  it('renders dashboard correctly', () => {
+describe("ISA (Debug mode on)", () => {
+  it('renders correctly', () => {
     const tree = renderer.create(
         <AppContext.Provider value={{debugMode:true}}>
-          <Dashboard />
+          <ISA />
         </AppContext.Provider>
       ).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
-  it('has 5 children', () => {
+  it('has 3 children', () => {
     const tree = renderer.create(
       <AppContext.Provider value={{debugMode:true}}>
-        <Dashboard />
+        <ISA />
       </AppContext.Provider>
     ).toJSON();
-    expect(tree.children.length).toBe(5);
+    expect(tree.children.length).toBe(3);
   });
 });

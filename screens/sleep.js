@@ -1,158 +1,217 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
 import {
     View,
-    Text,
-    ScrollView
+    ScrollView,
+    Dimensions,
+    Platform
 } from 'react-native';
 import { globalStyles } from '../styles/global';
-import { LineChart } from 'react-native-chart-kit';
-import * as SQLite from 'expo-sqlite';
+import { VictoryArea, VictoryChart, VictoryGroup, VictoryLegend, VictoryLine, VictoryScatter, VictoryTheme } from 'victory-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import Moment from 'moment';
+import FlashMessage, { showMessage } from "react-native-flash-message";
+import DBHelper from '../components/dbHelper';
+import DButton from '../components/button';
+import AppContext from '../components/AppContext';
 
-const db = SQLite.openDatabase('db.db');
+const windowWidth = Dimensions.get('window').width;
 
-const chartConfig = {
-    backgroundGradientFrom: '#fff',
-    backgroundGradientTo: '#fff',
-    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
-    decimalPlaces: 0,
-    useShadowColorFromDataset: false // optional
-};
+const dbHelper = new DBHelper();
 
-const timeInBedData = {
-    labels: [],
-    datasets: [
-        {
-            data: [],
-            color: (opacity = 1) => `rgba(20, 20, 20, ${opacity})`,
-            strokeWidth: 2
-        }
-    ],
-    legend: ['Hours in Bed']
+var colours = {
+    'hoursInBed': '#006bc9',
+    'hoursUntilSleep': '#004b8f',
+    'timesWokenUp': '#cc0000',
+    'sleepQuality': '#009900'
 }
 
-const timeTilSleepData = {
-    labels: [],
-    datasets: [
-        {
-            data: [],
-            color: (opacity = 1) => `rgba(20, 20, 20, ${opacity})`,
-            strokeWidth: 2
+var tempData = [];
+
+var hoursInBedData = [],
+    hoursUntilSleepData = [],
+    timesWokenUpData = [],
+    sleepQualityData = [];
+
+export default function Sleep({ navigation }) {
+
+    const myContext = useContext(AppContext);
+
+    var graphWidth = hoursInBedData.length*60+70;
+    // If graph width is less than window width, set the graph width to window width
+    graphWidth = graphWidth < windowWidth ? windowWidth : graphWidth;
+
+    const [date1, setDate1] = useState(new Date());
+    const [date2, setDate2] = useState(new Date());
+    const [showPicker1, setShowPicker1] = useState(false);
+    const [showPicker2, setShowPicker2] = useState(false);
+    const [showChart, setShowChart] = useState(false);
+
+    // This function sets the data and shows the chart
+    // Separate function as it'll otherwise just be duplicate code
+    function setData(aDate, bDate, temp) {
+        hoursInBedData = temp ? temp[0] : [],
+        hoursUntilSleepData = temp ? temp[1] : [],
+        timesWokenUpData = temp ? temp[2] : [],
+        sleepQualityData = temp ? temp[3] : [];
+
+        setShowChart(false);
+        if (hoursInBedData.length > 0) setShowChart(true);
+        else {
+            showMessage({
+                message: 'No data for: ' + aDate + ' - ' + bDate,
+                type: 'warning',
+            })
         }
-    ],
-    legend: ['Hours until sleep']
-}
+    }
 
-const timesWokenUpData = {
-    labels: [],
-    datasets: [
-        {
-            data: [],
-            color: (opacity = 1) => `rgba(20, 20, 20, ${opacity})`,
-            strokeWidth: 2
+    const changeFromDate = async (event, selectedDate) => {
+        setShowPicker1(!Platform.OS === 'ios');
+        // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
+        if (selectedDate) {
+            let dateSelect = Moment(selectedDate);
+            let secondDate = Moment(date2);
+
+            // If the date selected is after to date, give warning otherwise continue
+            if (dateSelect.isAfter(secondDate)) {
+                showMessage({
+                    message: "You can't pick a date later than 'to' date (" + secondDate.format('DD/MM/YYYY') + ")",
+                    type: 'warning',
+                })
+            } else {
+                setDate1(selectedDate);
+
+                // 'to' date is defaulted to the current date, so if it hasn't been picked yet, all the data should be shown
+                tempData = await dbHelper.getSleepData(dateSelect, secondDate);
+
+                setData(dateSelect.format('DD/MM/YYYY'), secondDate.format('DD/MM/YYYY'), tempData);
+            }
+         }
+    }
+
+    const changeToDate = async (event, selectedDate) => {
+        setShowPicker2(!Platform.OS === 'ios');
+        // If user gets picker then clicks cancel, selectedDate is null, so only run this if they select a date
+        if (selectedDate) {
+            let dateSelect = Moment(selectedDate);
+            let firstDate = Moment(date1);
+
+            // If the date selected is after to date, give warning otherwise continue
+            if (dateSelect.isBefore(firstDate)) {
+                showMessage({
+                    message: "You can't pick a date earlier than 'from' date (" + firstDate.format('DD/MM/YYYY') + ")",
+                    type: 'warning',
+                })
+            } else {
+                setDate2(selectedDate);
+
+                tempData = await dbHelper.getSleepData(firstDate, dateSelect);
+
+                setData(firstDate.format('DD/MM/YYYY'), dateSelect.format('DD/MM/YYYY'), tempData);
+            }  
         }
-    ],
-    legend: ['Times woken up throughout the night']
-}
+    }
 
-const sleepQualityData = {
-    labels: [],
-    datasets: [
-        {
-            data: [],
-            color: (opacity = 1) => `rgba(20, 20, 20, ${opacity})`,
-            strokeWidth: 2
-        }
-    ],
-    legend: ['Sleep Quality Rating']
-}
+    const showFromPicker = () => {
+        setShowPicker1(true);
+    }
 
-var graphLabels = [];
-var timeInBed = [];
-var timeTilSleep = [];
-var timesWokenUp = [];
-var sleepQuality = [];
-
-// Retrieve data from database
-//React.useEffect(() => {
-db.transaction(tx => {
-    tx.executeSql('SELECT date, timeInBed, timeTilSleep, timesWokenUp, sleepQuality from sleep', [], (_, { rows }) => {
-        for (var i=0; i < (rows._array.length); i++) {
-            graphLabels.push(rows._array[i].date.slice(0, 5));
-            timeInBed.push(rows._array[i].timeInBed);
-            timeTilSleep.push(rows._array[i].timeTilSleep);
-            timesWokenUp.push(rows._array[i].timesWokenUp);
-            sleepQuality.push(rows._array[i].sleepQuality);
-        }
-    });
-});
-//}, []);
-
-export default function Sleep() {
-    var graphWidth = graphLabels.length*80;
-
-    timeInBedData.labels = graphLabels;
-    timeInBedData.datasets[0].data = timeInBed;
-
-    timeTilSleepData.labels = graphLabels;
-    timeTilSleepData.datasets[0].data = timeTilSleep;
-
-    timesWokenUpData.labels = graphLabels;
-    timesWokenUpData.datasets[0].data = timesWokenUp;
-
-    sleepQualityData.labels = graphLabels;
-    sleepQualityData.datasets[0].data = sleepQuality;    
+    const showToPicker = () => {
+        setShowPicker2(true);
+    }
 
     return (
-        <ScrollView style={globalStyles.container}>
-            <View style={globalStyles.chart}>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    <LineChart
-                        data={timeInBedData}
-                        width={graphWidth}
-                        height={220}
-                        chartConfig={chartConfig}
-                        bezier
-                        style={{borderRadius: 10}}
+        <View style={globalStyles.container}>
+            <ScrollView showsVerticalScrollIndicator={false} >
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }} >
+                    <DButton text="'From' date" onPress={showFromPicker} />
+                    <DButton text="'To' date" onPress={showToPicker} />
+                </View>
+
+                {showPicker1 && (
+                    <DateTimePicker
+                    testID="dateTimePicker1"
+                    value={date1}
+                    mode={'date'}
+                    display="default"
+                    onChange={changeFromDate}
                     />
-                </ScrollView>
-            </View>
-            <View style={globalStyles.chart}>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    <LineChart
-                        data={timeTilSleepData}
-                        width={graphWidth}
-                        height={220}
-                        chartConfig={chartConfig}
-                        bezier
-                        style={{borderRadius: 10}}
+                )}
+
+                {showPicker2 && (
+                    <DateTimePicker
+                    testID="dateTimePicker1"
+                    value={date2}
+                    mode={'date'}
+                    display="default"
+                    onChange={changeToDate}
                     />
-                </ScrollView>
-            </View>
-            <View style={globalStyles.chart}>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    <LineChart
-                        data={timesWokenUpData}
-                        width={graphWidth}
-                        height={220}
-                        chartConfig={chartConfig}
-                        bezier
-                        style={{borderRadius: 10}}
-                    />
-                </ScrollView>
-            </View>
-            <View style={globalStyles.chart}>
-                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    <LineChart
-                        data={sleepQualityData}
-                        width={graphWidth}
-                        height={220}
-                        chartConfig={chartConfig}
-                        bezier
-                        style={{borderRadius: 10}}
-                    />
-                </ScrollView>
-            </View>
-        </ScrollView>
+                )}
+
+                {showChart && (
+                    <View>
+                        <View style={globalStyles.card} >
+                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
+                                <VictoryChart theme={VictoryTheme.material} width={graphWidth} >
+                                    <VictoryLegend
+                                        x = {windowWidth / 2 - 100}
+                                        title='Legend'
+                                        centerTitle
+                                        orientation='horizontal'
+                                        data={[
+                                            { name: 'Hours in Bed', symbol: { fill: colours['hoursInBed']} },
+                                            { name: 'Hours Until Sleep', symbol: { fill: colours['hoursUntilSleep']} }
+                                        ]}
+                                    />
+
+                                    {/* Hours in Bed */}
+                                    <VictoryArea
+                                        style={{ data: { fill: colours['hoursInBed'] } }}
+                                        data={hoursInBedData}
+                                    />
+
+                                    {/* Hours until Sleep */}
+                                    <VictoryArea
+                                        style={{ data: { fill: colours['hoursUntilSleep'] } }}
+                                        data={hoursUntilSleepData}
+                                    />
+                                </VictoryChart>
+                            </ScrollView>
+                        </View>
+                        <View style={globalStyles.card} >
+                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}>
+                                <VictoryChart theme={VictoryTheme.material} width={graphWidth} >
+                                    <VictoryLegend
+                                        x = {windowWidth / 2 - 110}
+                                        title='Legend'
+                                        centerTitle
+                                        orientation='horizontal'
+                                        data={[
+                                            { name: 'Times Woken Up', symbol: { fill: colours['timesWokenUp']} },
+                                            { name: 'Sleep Quality Rating', symbol: { fill: colours['sleepQuality']} }
+                                        ]}
+                                    />
+                                    {/* Times Woken UP */}
+                                    <VictoryGroup data={timesWokenUpData}>
+                                        <VictoryLine style={{ data: { stroke: colours['timesWokenUp'] }, parent: { border: '1px solid #ccc'} }} />
+                                        <VictoryScatter style = {{ data: { fill: colours['timesWokenUp'] }}} />
+                                    </VictoryGroup>
+
+                                    {/* Sleep Quality */}
+                                    <VictoryGroup data={sleepQualityData}>    
+                                        <VictoryLine style={{ data: { stroke: colours['sleepQuality'] }, parent: { border: '1px solid #ccc'} }} />
+                                        <VictoryScatter style = {{ data: { fill: colours['sleepQuality'] }}} />
+                                    </VictoryGroup>
+                                </VictoryChart>
+                            </ScrollView>
+                        </View>
+                    </View>
+                )}
+
+                {myContext.debugMode && (
+                    <DButton text='Add Data' onPress={() => navigation.navigate('AddSleep')} />
+                )}
+            </ScrollView>
+            <FlashMessage position='bottom' />
+        </View>
     )
 }

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ScreenTime (Debug mode off) renders correctly 1`] = `
+exports[`ISA (Debug mode off) renders correctly 1`] = `
 <View
   style={
     Object {
@@ -55,7 +55,7 @@ exports[`ScreenTime (Debug mode off) renders correctly 1`] = `
           }
         }
       >
-        Pick Date
+        Pick date
       </Text>
     </View>
   </View>
@@ -79,7 +79,7 @@ exports[`ScreenTime (Debug mode off) renders correctly 1`] = `
 </View>
 `;
 
-exports[`ScreenTime (Debug mode on) renders correctly 1`] = `
+exports[`ISA (Debug mode on) renders correctly 1`] = `
 <View
   style={
     Object {
@@ -134,7 +134,7 @@ exports[`ScreenTime (Debug mode on) renders correctly 1`] = `
           }
         }
       >
-        Pick Date
+        Pick date
       </Text>
     </View>
   </View>

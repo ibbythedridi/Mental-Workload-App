@@ -1,24 +1,22 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import Settings from '../screens/settings';
+import Sleep from '../screens/sleep';
 import AppContext from '../components/AppContext';
 
-jest.useFakeTimers();
-
-describe("Settings", () => {
-  it('renders settings correctly', () => {
+describe("Sleep", () => {
+  it('renders correctly', () => {
     const tree = renderer.create(
       <AppContext.Provider value={{debugMode:false}}>
-        <Settings />
+        <Sleep />
       </AppContext.Provider>
     ).toJSON();
-    expect(tree).toMatchSnapshot();
+      expect(tree).toMatchSnapshot();
   });
 
   it('has 2 children', () => {
     const tree = renderer.create(
       <AppContext.Provider value={{debugMode:false}}>
-        <Settings />
+        <Sleep />
       </AppContext.Provider>
     ).toJSON();
     expect(tree.children.length).toBe(2);
